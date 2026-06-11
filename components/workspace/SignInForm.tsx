@@ -55,13 +55,13 @@ export function SignInForm() {
 
   if (phase === "offer-signup") {
     return (
-      <div className="flex flex-col gap-4">
-        <p className="text-slate-700">
-          No organizer named <strong>{name.trim()}</strong> yet. Create the
+      <div className="flex flex-col gap-6">
+        <p className="text-lg font-bold text-[#111]">
+          No organizer named <strong className="bg-[#00e5ff] px-2 py-0.5 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111] mx-1">{name.trim()}</strong> yet. Create the
           account?
         </p>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="flex gap-2">
+        {error && <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">{error}</p>}
+        <div className="flex flex-col gap-4">
           <Button
             themeColor="primary"
             disabled={submitting}
@@ -84,19 +84,22 @@ export function SignInForm() {
   }
 
   return (
-    <form onSubmit={handleSignIn} className="flex flex-col gap-3">
-      <Input
-        value={name}
-        onChange={(e) => setName(String(e.value ?? ""))}
-        placeholder="Your organizer name"
-        aria-label="Organizer name"
-        maxLength={60}
-      />
-      <p className="text-xs text-slate-500">
+    <form onSubmit={handleSignIn} className="flex flex-col gap-5">
+      <label className="flex flex-col gap-2 text-xl font-black uppercase tracking-tighter text-[#111]">
+        Your organizer name
+        <Input
+          value={name}
+          onChange={(e) => setName(String(e.value ?? ""))}
+          placeholder="Ada Lovelace"
+          aria-label="Organizer name"
+          maxLength={60}
+        />
+      </label>
+      <p className="text-sm font-bold text-[#111] bg-[#ffd200] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">
         Names are unique (case-insensitive). New name? We&apos;ll offer to
         create it.
       </p>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">{error}</p>}
       <Button
         type="submit"
         themeColor="primary"

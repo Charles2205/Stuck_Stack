@@ -18,6 +18,7 @@
     "@progress/kendo-licensing": "^1.11.2",
     "@progress/kendo-react-buttons": "^15.0.0",
     "@progress/kendo-react-charts": "^15.0.0",
+    "@progress/kendo-react-dateinputs": "^15.0.0",
     "@progress/kendo-react-dialogs": "^15.0.0",
     "@progress/kendo-react-dropdowns": "^15.0.0",
     "@progress/kendo-react-grid": "^15.0.0",

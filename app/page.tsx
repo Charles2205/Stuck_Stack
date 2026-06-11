@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { JoinEventForm } from "@/components/JoinEventForm";
 import { DEMO_EVENT_SLUG } from "@/lib/constants";
 import { prisma } from "@/lib/db";
@@ -40,6 +41,12 @@ export default async function LandingPage() {
                 </p>
               </div>
               <JoinEventForm slug={event.slug} />
+              <p className="text-sm text-slate-500 border-t border-slate-100 pt-3">
+                Organizer?{" "}
+                <Link href="/signin" className="underline text-indigo-600">
+                  Sign in to your workspace
+                </Link>
+              </p>
             </>
           ) : (
             <p className="text-slate-600">

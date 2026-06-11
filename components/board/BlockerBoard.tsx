@@ -82,17 +82,6 @@ export function BlockerBoard({
                 <Link href="/" className="underline">
                   switch
                 </Link>
-                {attendee.role === "ORGANISER" && (
-                  <>
-                    {" · "}
-                    <Link
-                      href={`/event/${slug}/organiser`}
-                      className="underline"
-                    >
-                      organiser dashboard
-                    </Link>
-                  </>
-                )}
               </>
             ) : (
               <>

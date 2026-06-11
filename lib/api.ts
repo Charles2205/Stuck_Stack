@@ -47,9 +47,9 @@ export function jsonError(
  * Wraps a route handler body: ApiError and ZodError become consistent JSON
  * error responses; anything else becomes a 500.
  */
-export async function handleApi<T>(
-  fn: () => Promise<NextResponse<T>>,
-): Promise<NextResponse<T> | NextResponse<ApiErrorBody>> {
+export async function handleApi(
+  fn: () => Promise<NextResponse>,
+): Promise<NextResponse> {
   try {
     return await fn();
   } catch (err) {

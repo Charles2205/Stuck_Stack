@@ -8,7 +8,13 @@ import { postJson } from "@/lib/hooks/fetcher";
 import { useSession } from "@/lib/hooks/useSession";
 import type { AttendeeDTO } from "@/lib/types";
 
-export function JoinEventForm({ slug }: { slug: string }) {
+export function JoinEventForm({
+  slug,
+  allowOrganiserJoin = true,
+}: {
+  slug: string;
+  allowOrganiserJoin?: boolean;
+}) {
   const router = useRouter();
   const { attendee, mutate } = useSession();
   const [name, setName] = useState("");
@@ -18,25 +24,27 @@ export function JoinEventForm({ slug }: { slug: string }) {
 
   const boardHref = `/event/${slug}`;
   const organiserHref = `/event/${slug}/organiser`;
+  const attendeeJoinedThisEvent = attendee?.eventSlug === slug;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
+    const joiningAsOrganiser = allowOrganiserJoin ? organiser : false;
     try {
       const { attendee: joined } = await postJson<{ attendee: AttendeeDTO }>(
         `/api/events/${slug}/join`,
-        { name, organiser },
+        { name, organiser: joiningAsOrganiser },
       );
       await mutate({ attendee: joined }, { revalidate: false });
-      router.push(organiser ? organiserHref : boardHref);
+      router.push(joiningAsOrganiser ? organiserHref : boardHref);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not join the event");
       setSubmitting(false);
     }
   }
 
-  if (attendee) {
+  if (attendee && attendeeJoinedThisEvent) {
     return (
       <div className="flex flex-col gap-3">
         <p className="text-slate-600">
@@ -64,6 +72,28 @@ export function JoinEventForm({ slug }: { slug: string }) {
           submitting={submitting}
           error={error}
           onSubmit={handleSubmit}
+          allowOrganiserJoin={allowOrganiserJoin}
+        />
+      </div>
+    );
+  }
+
+  if (attendee && !attendeeJoinedThisEvent) {
+    return (
+      <div className="flex flex-col gap-3">
+        <p className="text-sm text-slate-500">
+          You are currently joined to another event as{" "}
+          <strong>{attendee.name}</strong>. Join this event below to switch.
+        </p>
+        <RawJoinForm
+          name={name}
+          setName={setName}
+          organiser={organiser}
+          setOrganiser={setOrganiser}
+          submitting={submitting}
+          error={error}
+          onSubmit={handleSubmit}
+          allowOrganiserJoin={allowOrganiserJoin}
         />
       </div>
     );
@@ -78,6 +108,7 @@ export function JoinEventForm({ slug }: { slug: string }) {
       submitting={submitting}
       error={error}
       onSubmit={handleSubmit}
+      allowOrganiserJoin={allowOrganiserJoin}
     />
   );
 }
@@ -90,21 +121,27 @@ function RawJoinForm(props: {
   submitting: boolean;
   error: string | null;
   onSubmit: (e: React.FormEvent) => void;
+  allowOrganiserJoin: boolean;
 }) {
   return (
     <form onSubmit={props.onSubmit} className="flex flex-col gap-3">
-      <Input
-        value={props.name}
-        onChange={(e) => props.setName(String(e.value ?? ""))}
-        placeholder="Your name"
-        aria-label="Your name"
-        maxLength={60}
-      />
-      <Checkbox
-        checked={props.organiser}
-        onChange={(e) => props.setOrganiser(Boolean(e.value))}
-        label="I'm an organiser (opens the live dashboard)"
-      />
+      <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
+        Your name
+        <Input
+          value={props.name}
+          onChange={(e) => props.setName(String(e.value ?? ""))}
+          placeholder="Ada Lovelace"
+          aria-label="Your name"
+          maxLength={60}
+        />
+      </label>
+      {props.allowOrganiserJoin && (
+        <Checkbox
+          checked={props.organiser}
+          onChange={(e) => props.setOrganiser(Boolean(e.value))}
+          label="I'm an organiser (opens the live dashboard)"
+        />
+      )}
       {props.error && <p className="text-sm text-red-600">{props.error}</p>}
       <Button
         type="submit"

@@ -20,7 +20,7 @@ Open <http://localhost:3000>:
 
 1. **Join** the seeded event ("GitNation Conf 2026") with just your name — tick *"I'm an organiser"* to unlock the dashboard.
 2. **Board** (`/event/gitnation-2026`): Kendo Cards full of seeded blockers. Filter by tag (MultiSelect), post your own blocker (Dialog), hit *"I'm stuck too"*, or *"I can help"* → *"Claim a 5-min slot"*.
-3. **Organiser dashboard** (`/event/gitnation-2026/organiser`): Kendo Grid of all blockers, Kendo Chart of demand by category, and live **suggested pop-up clinics**.
+3. **Organiser dashboard** (`/event/gitnation-2026/organiser`): copy/share the event join link as a QR code, view the Kendo Grid of all blockers, Kendo Chart of demand by category, and live **suggested pop-up clinics**.
 
 **Real-time feel:** open the board in two browser windows (one normal, one private so each has its own identity), click *"I'm stuck too"* in one — the badge count updates in the other within ~3 seconds (SWR polling; see the SSE/websocket scaling path in ARCHITECTURE.md §5).
 

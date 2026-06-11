@@ -1,11 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useDashboard } from "@/lib/hooks/useDashboard";
 import { useSession } from "@/lib/hooks/useSession";
 import { BlockerGrid } from "./BlockerGrid";
-import { CategoryChart } from "./CategoryChart";
 import { ClinicSuggestions } from "./ClinicSuggestions";
+
+// Kendo Charts pull in hammerjs, which touches `window` at module scope —
+// must be loaded client-side only.
+const CategoryChart = dynamic(
+  () => import("./CategoryChart").then((m) => m.CategoryChart),
+  { ssr: false, loading: () => <p className="text-slate-500">Loading chart…</p> },
+);
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (

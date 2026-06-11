@@ -1,19 +1,573 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #fffbef;
+  --foreground: #111111;
+  --brutal-border: #111111;
+  --brutal-shadow: 4px 4px 0px 0px #111111;
+  --brutal-shadow-hover: 2px 2px 0px 0px #111111;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
+}
+
+@utility brutal-box {
+  border: 3px solid var(--brutal-border);
+  box-shadow: var(--brutal-shadow);
+  border-radius: 0;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+@utility brutal-box-hover {
+  &:hover {
+    transform: translate(2px, 2px);
+    box-shadow: var(--brutal-shadow-hover);
+  }
+}
+
+@import "tailwindcss";
+
+:root {
+  --background: #fffbef;
+  --foreground: #111111;
+  --brutal-border: #111111;
+  --brutal-shadow: 4px 4px 0px 0px #111111;
+  --brutal-shadow-hover: 2px 2px 0px 0px #111111;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+@utility brutal-box {
+  border: 3px solid var(--brutal-border);
+  box-shadow: var(--brutal-shadow);
+  border-radius: 0;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+@utility brutal-box-hover {
+  &:hover {
+    transform: translate(2px, 2px);
+    box-shadow: var(--brutal-shadow-hover);
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Neobrutalism Kendo UI Overrides */
+.k-button {
+  border: 4px solid var(--brutal-border) !important;
+  box-shadow: 4px 4px 0px 0px var(--brutal-border) !important;
+  border-radius: 0 !important;
+  transition: all 0.1s ease-in-out !important;
+  background-color: white;
+  color: var(--foreground) !important;
+  padding: 12px 24px !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  cursor: pointer !important;
+}
+
+.k-button:hover,
+.k-button.k-focus,
+.k-button.k-active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0px 0px 0px 0px var(--brutal-border) !important;
+}
+
+/* Small Buttons (size="small") */
+.k-button-sm,
+.k-button-size-small,
+.k-button[size="small"] {
+  padding: 8px 14px !important;
+  font-size: 14px !important;
+  border-width: 3px !important;
+  box-shadow: 3px 3px 0px 0px var(--brutal-border) !important;
+}
+
+.k-button-sm:hover,
+.k-button-size-small:hover {
+  transform: translate(3px, 3px) !important;
+  box-shadow: 0px 0px 0px 0px var(--brutal-border) !important;
+}
+
+.k-button-solid-primary {
+  background-color: #ffd200 !important; /* Bright Yellow */
+}
+
+.k-button-solid-success {
+  background-color: #00e676 !important; /* Vibrant Green */
+}
+
+.k-button-solid-error {
+  background-color: #ff3d00 !important; /* Vibrant Red/Orange */
+  color: white !important;
+}
+
+/* Inputs, Dropdowns, MultiSelects, TextAreas */
+.k-input,
+.k-textarea,
+.k-multiselect,
+.k-dropdownlist,
+.k-numerictextbox {
+  border: 3px solid var(--brutal-border) !important;
+  box-shadow: 4px 4px 0px 0px var(--brutal-border) !important;
+  border-radius: 0 !important;
+  background-color: white !important;
+  color: var(--foreground) !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+span.k-input,
+span.k-textarea,
+.k-input-container,
+.k-multiselect,
+.k-dropdownlist,
+.k-numerictextbox {
+  padding: 0 !important;
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+input.k-input,
+textarea.k-textarea {
+  padding: 10px 12px !important;
+}
+
+.k-input:focus-within,
+.k-textarea:focus-within,
+.k-multiselect:focus-within,
+.k-dropdownlist:focus-within {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0px 0px var(--brutal-border) !important;
+  border-color: #ff3d00 !important; /* Accent border on focus */
+  background-color: #fffbef !important; /* Soft cream background on focus */
+  outline: none !important;
+}
+
+.k-input-inner,
+.k-textarea-inner,
+.k-input-value-text {
+  border: none !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #111 !important;
+  padding: 10px 12px !important;
+  background: transparent !important;
+}
+
+/* Placeholders */
+.k-input-inner::placeholder,
+.k-textarea-inner::placeholder {
+  color: #64748b !important;
+  font-weight: 500 !important;
+  opacity: 0.8 !important;
+}
+
+/* NumericTextBox Spinner Buttons */
+.k-numerictextbox .k-input-spinner-wrapper,
+.k-numerictextbox .k-input-spinner {
+  margin-right: 12px !important; /* Push in the wrapper so there is space for their shadows */
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  justify-content: center !important;
+}
+
+.k-numerictextbox .k-input-spinner-wrapper .k-button,
+.k-numerictextbox .k-input-spinner .k-button,
+.k-numerictextbox .k-spinner-button {
+  padding: 1px 6px !important;
+  font-size: 10px !important;
+  border: 2px solid #111 !important;
+  box-shadow: 2px 2px 0px 0px #111 !important;
+  border-radius: 0 !important;
+  background-color: white !important;
+  color: #111 !important;
+  cursor: pointer !important;
+  transition: all 0.1s ease-in-out !important;
+  transform: none !important;
+  height: 16px !important;
+  min-height: 0 !important;
+}
+
+.k-numerictextbox .k-input-spinner-wrapper .k-button:hover,
+.k-numerictextbox .k-input-spinner .k-button:hover,
+.k-numerictextbox .k-spinner-button:hover {
+  background-color: #ffd200 !important; /* Yellow hover background */
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0px 0px #111 !important;
+}
+
+.k-numerictextbox .k-input-spinner-wrapper .k-button:active,
+.k-numerictextbox .k-input-spinner .k-button:active,
+.k-numerictextbox .k-spinner-button:active {
+  background-color: #ff3d00 !important; /* Orange-Red active background */
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0px 0px 0px 0px #111 !important;
+}
+
+/* MultiSelect Chips */
+.k-chip {
+  background-color: #00e5ff !important;
+  border: 3px solid #111 !important;
+  border-radius: 0 !important;
+  color: #111 !important;
+  font-weight: 900 !important;
+  box-shadow: 3px 3px 0px 0px #111 !important;
+  text-transform: uppercase !important;
+  padding: 4px 8px !important;
+  margin: 4px !important;
+}
+
+/* Popups & Lists (Dropdowns) */
+.k-animation-container .k-popup {
+  border: 4px solid #111 !important;
+  border-radius: 0 !important;
+  box-shadow: 8px 8px 0px 0px #111 !important;
+  padding: 0 !important;
+  background-color: white !important;
+}
+
+.k-list-item {
+  border-bottom: 3px solid #111 !important;
+  padding: 12px 16px !important;
+  font-weight: 900 !important;
+  font-size: 16px !important;
+  color: #111 !important;
+  transition: background-color 0.1s !important;
+}
+.k-list-item:last-child {
+  border-bottom: none !important;
+}
+
+.k-list-item:hover,
+.k-list-item.k-focus,
+.k-list-item.k-selected {
+  background-color: #ff3d00 !important;
+  color: white !important;
+  box-shadow: none !important;
+}
+
+/* Checkboxes */
+.k-checkbox {
+  border: 4px solid var(--brutal-border) !important;
+  box-shadow: 2px 2px 0px 0px var(--brutal-border) !important;
+  border-radius: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+  background-color: white !important;
+  cursor: pointer !important;
+}
+
+.k-checkbox:checked {
+  background-color: #00e676 !important;
+  background-image: none !important; /* We can rely on color or custom SVG */
+  position: relative;
+}
+
+.k-checkbox:checked::after {
+  content: "X";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 900;
+  font-size: 18px;
+  color: #111;
+}
+
+.k-card,
+.k-dialog-wrapper .k-dialog {
+  border: 4px solid var(--brutal-border) !important;
+  box-shadow: 8px 8px 0px 0px var(--brutal-border) !important;
+  border-radius: 0 !important;
+  background-color: white;
+}
+
+.k-card-actions,
+.k-card-actions-horizontal,
+.k-card-actions-vertical {
+  flex-flow: row wrap !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  padding: 16px !important;
+}
+
+.k-dialog-titlebar {
+  background-color: #ffd200 !important;
+  border-bottom: 4px solid #111 !important;
+  padding: 16px !important;
+  font-weight: 900 !important;
+  font-size: 24px !important;
+  text-transform: uppercase !important;
+  color: #111 !important;
+}
+
+.k-window-title {
+  font-weight: 900 !important;
+}
+
+/* Dialog Titlebar Close Button */
+.k-dialog-titlebar-action,
+.k-window-titlebar-action {
+  border: 3px solid #111 !important;
+  background-color: white !important;
+  color: #111 !important;
+  box-shadow: 2px 2px 0px 0px #111 !important;
+  border-radius: 0 !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.1s ease-in-out !important;
+  cursor: pointer !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.k-dialog-titlebar-action:hover,
+.k-window-titlebar-action:hover {
+  background-color: #ff3d00 !important; /* Red hover background */
+  color: white !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0px 0px #111 !important;
+}
+
+.k-dialog-titlebar-action:active,
+.k-window-titlebar-action:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0px 0px 0px 0px #111 !important;
+}
+
+.k-dialog-actions {
+  border-top: 4px solid #111 !important;
+  padding: 16px !important;
+  background-color: #fffbef !important;
+}
+
+/* Grid */
+.k-grid {
+  border: 4px solid var(--brutal-border) !important;
+  box-shadow: 8px 8px 0px 0px var(--brutal-border) !important;
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+}
+.k-grid-header {
+  background-color: #ffd200 !important;
+  border-bottom: 4px solid #111 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  font-size: 16px !important;
+  color: #111 !important;
+}
+.k-grid th, .k-grid td {
+  border-right: 3px solid #111 !important;
+  border-bottom: 3px solid #111 !important;
+}
+
+/* Grid Filter Row Overrides */
+.k-filter-row .k-input,
+.k-filter-row .k-multiselect,
+.k-filter-row .k-dropdownlist,
+.k-filter-row .k-numerictextbox,
+.k-filter-row .k-datepicker {
+  border: 2px solid #111 !important;
+  box-shadow: none !important; /* Remove shadows to prevent overlapping */
+  padding: 0 !important;
+  background-color: white !important;
+  height: 32px !important; /* Flat row height */
+}
+
+.k-filter-row .k-input-inner {
+  padding: 4px 8px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  height: 100% !important;
+}
+
+.k-filtercell {
+  overflow: visible !important;
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  width: 100% !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.k-filtercell-wrapper {
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  width: 100% !important;
+  align-items: center !important;
+  gap: 4px !important;
+  flex: 1 1 auto !important;
+}
+
+/* Force filter cell inputs/pickers to stretch and fill column width */
+.k-filtercell .k-input,
+.k-filtercell .k-datepicker,
+.k-filtercell .k-numerictextbox,
+.k-filtercell .k-dropdownlist,
+.k-filtercell .k-multiselect,
+.k-filtercell-wrapper > .k-input,
+.k-filtercell-wrapper > .k-datepicker,
+.k-filtercell-wrapper > .k-numerictextbox,
+.k-filtercell-wrapper > .k-dropdownlist {
+  flex: 1 1 0px !important;
+  width: 0 !important;
+  min-width: 0 !important;
+}
+
+/* Standalone operator and clear buttons next to inputs */
+.k-filtercell > .k-button,
+.k-filtercell-wrapper > .k-button,
+.k-filtercell-operator > .k-button,
+.k-filter-row .k-button {
+  padding: 0 !important;
+  font-size: 12px !important;
+  border: 2px solid #111 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  height: 28px !important;
+  width: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: white !important;
+  flex-shrink: 0 !important;
+}
+
+.k-filtercell > .k-button:hover,
+.k-filtercell-wrapper > .k-button:hover,
+.k-filtercell-operator > .k-button:hover,
+.k-filter-row .k-button:hover {
+  background-color: #ffd200 !important; /* Yellow hover background */
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.k-filter-row .k-button-solid-base,
+.k-filter-row .k-clear-value {
+  border: 2px solid #111 !important;
+  background-color: #f1f5f9 !important;
+}
+
+/* Input-embedded Buttons (DatePicker calendar button, Dropdown arrow, etc.) */
+.k-input-container .k-input-button,
+.k-input-container .k-input-suffix .k-button,
+.k-input-container .k-spinner-button,
+.k-input .k-input-button,
+.k-datepicker .k-input-button,
+.k-numerictextbox .k-input-button,
+.k-dropdownlist .k-input-button,
+.k-input-inner + .k-button,
+.k-input-suffix .k-button {
+  border: none !important;
+  border-left: 2px solid #111 !important; /* Only left separator */
+  box-shadow: none !important;
+  transform: none !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  align-self: stretch !important;
+  height: auto !important;
+  min-height: 100% !important;
+  width: 32px !important; /* Made 32px to look like a clean square */
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.k-input-container .k-input-button:hover,
+.k-input-container .k-input-suffix .k-button:hover,
+.k-input-container .k-spinner-button:hover,
+.k-input .k-input-button:hover,
+.k-input-inner + .k-button:hover,
+.k-input-suffix .k-button:hover {
+  background-color: #ffd200 !important; /* Yellow hover inside input */
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Force inner icons inside input buttons to center statically (bypassing Kendo absolute offsets) */
+.k-input-container .k-input-button .k-icon,
+.k-input-container .k-input-button .k-svg-icon,
+.k-input-container .k-input-button .k-button-icon,
+.k-input-container .k-input-suffix .k-button .k-icon,
+.k-input-container .k-input-suffix .k-button .k-svg-icon,
+.k-datepicker .k-input-button .k-icon,
+.k-datepicker .k-input-button .k-svg-icon,
+.k-dropdownlist .k-input-button .k-icon,
+.k-dropdownlist .k-input-button .k-svg-icon {
+  position: static !important;
+  margin: auto !important;
+  transform: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.k-input-container .k-input-button .k-icon svg,
+.k-input-container .k-input-button .k-svg-icon svg,
+.k-dropdownlist .k-input-button .k-svg-icon svg {
+  margin: auto !important;
+  display: block !important;
+}
+
+/* Badges */
+.k-badge {
+  border: 3px solid var(--brutal-border) !important;
+  box-shadow: 3px 3px 0px 0px var(--brutal-border) !important;
+  border-radius: 0 !important;
+  font-weight: 900 !important;
+  padding: 4px 8px !important;
+  text-transform: uppercase !important;
+}
+
+/* Prevent Kendo from absolute positioning badges inside card headers */
+.k-card-header .k-badge {
+  position: static !important;
+  transform: none !important;
+  top: auto !important;
+  right: auto !important;
+  display: inline-flex !important;
+}
+
+.k-badge-info {
+  background-color: #00e5ff !important;
+  color: #111 !important;
+}
+
+.k-badge-warning {
+  background-color: #ff9100 !important;
+  color: #111 !important;
+}
+
+.k-badge-success {
+  background-color: #00e676 !important;
+  color: #111 !important;
 }

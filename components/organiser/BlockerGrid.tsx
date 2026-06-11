@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { process, type State } from "@progress/kendo-data-query";
-import { Grid, GridColumn } from "@progress/kendo-react-grid";
+import { Grid, GridColumn, GridColumnMenuFilter, GridColumnMenuProps } from "@progress/kendo-react-grid";
+
+const ColumnMenu = (props: GridColumnMenuProps) => {
+  return (
+    <div>
+      <GridColumnMenuFilter {...props} expanded={true} />
+    </div>
+  );
+};
 import type { BlockerDTO } from "@/lib/types";
 
 type GridRow = {
@@ -39,25 +47,26 @@ export function BlockerGrid({ blockers }: { blockers: BlockerDTO[] }) {
       data={process(rows, dataState)}
       {...dataState}
       sortable
-      filterable
       onDataStateChange={(e) => setDataState(e.dataState)}
       style={{ maxHeight: 520 }}
     >
-      <GridColumn field="title" title="Blocker" />
-      <GridColumn field="author" title="Author" width="140px" />
-      <GridColumn field="tags" title="Tags" width="180px" />
-      <GridColumn field="status" title="Status" width="120px" />
+      <GridColumn field="title" title="Blocker" columnMenu={ColumnMenu} />
+      <GridColumn field="author" title="Author" width="140px" columnMenu={ColumnMenu} />
+      <GridColumn field="tags" title="Tags" width="180px" columnMenu={ColumnMenu} />
+      <GridColumn field="status" title="Status" width="120px" columnMenu={ColumnMenu} />
       <GridColumn
         field="stuckCount"
         title="Stuck too"
         width="120px"
         filter="numeric"
+        columnMenu={ColumnMenu}
       />
       <GridColumn
         field="helperCount"
         title="Helpers"
         width="110px"
         filter="numeric"
+        columnMenu={ColumnMenu}
       />
       <GridColumn
         field="createdAt"
@@ -65,6 +74,7 @@ export function BlockerGrid({ blockers }: { blockers: BlockerDTO[] }) {
         width="150px"
         filter="date"
         format="{0:HH:mm}"
+        columnMenu={ColumnMenu}
       />
     </Grid>
   );

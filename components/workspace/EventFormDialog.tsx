@@ -5,7 +5,7 @@ import { Button } from "@progress/kendo-react-buttons";
 import { DatePicker } from "@progress/kendo-react-dateinputs";
 import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
 import { Input } from "@progress/kendo-react-inputs";
-import { Label } from "@progress/kendo-react-labels";
+
 import { patchJson, postJson } from "@/lib/hooks/fetcher";
 import type { WorkspaceEventDTO } from "@/lib/types";
 import { createEventSchema, updateEventSchema } from "@/lib/validation";
@@ -77,19 +77,19 @@ export function EventFormDialog({ event, onClose, onSaved }: Props) {
       onClose={onClose}
       width={440}
     >
-      <div className="flex flex-col gap-4 py-2">
-        <div className="flex flex-col gap-1">
-          <Label>Event name</Label>
+      <div className="flex flex-col gap-5 py-4">
+        <label className="flex flex-col gap-2 text-xl font-black uppercase tracking-tighter text-[#111]">
+          Event name
           <Input
             value={name}
             onChange={(e) => handleNameChange(String(e.value ?? ""))}
             placeholder="GitNation Conf 2027"
             maxLength={80}
           />
-        </div>
+        </label>
         {!isEdit && (
-          <div className="flex flex-col gap-1">
-            <Label>Slug (in the board URL — /event/&lt;slug&gt;)</Label>
+          <label className="flex flex-col gap-2 text-xl font-black uppercase tracking-tighter text-[#111]">
+            Slug <span className="text-sm tracking-normal bg-[#ffd200] px-1 w-fit border-[2px] border-[#111]">in the URL: /event/&lt;slug&gt;</span>
             <Input
               value={slug}
               onChange={(e) => {
@@ -99,13 +99,13 @@ export function EventFormDialog({ event, onClose, onSaved }: Props) {
               placeholder="gitnation-2027"
               maxLength={60}
             />
-          </div>
+          </label>
         )}
-        <div className="flex flex-col gap-1">
-          <Label>Date</Label>
+        <label className="flex flex-col gap-2 text-xl font-black uppercase tracking-tighter text-[#111]">
+          Date
           <DatePicker value={date} onChange={(e) => setDate(e.value)} />
-        </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        </label>
+        {error && <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">{error}</p>}
       </div>
       <DialogActionsBar>
         <Button onClick={onClose} disabled={submitting}>

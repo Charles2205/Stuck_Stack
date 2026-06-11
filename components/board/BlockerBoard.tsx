@@ -84,17 +84,6 @@ export function BlockerBoard({
                 <Link href="/" className="underline">
                   switch
                 </Link>
-                {eventAttendee.role === "ORGANISER" && (
-                  <>
-                    {" · "}
-                    <Link
-                      href={`/event/${slug}/organiser`}
-                      className="underline"
-                    >
-                      organiser dashboard
-                    </Link>
-                  </>
-                )}
               </>
             ) : (
               <>
@@ -144,7 +133,7 @@ export function BlockerBoard({
             </p>
           </div>
           <div className="lg:border-l lg:border-slate-200 lg:pl-5">
-            <JoinEventForm slug={slug} allowOrganiserJoin={false} />
+            <JoinEventForm slug={slug} />
           </div>
         </section>
       )}

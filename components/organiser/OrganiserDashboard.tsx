@@ -3,7 +3,6 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useDashboard } from "@/lib/hooks/useDashboard";
-import { useSession } from "@/lib/hooks/useSession";
 import { BlockerGrid } from "./BlockerGrid";
 import { ClinicSuggestions } from "./ClinicSuggestions";
 import { EventSharePanel } from "./EventSharePanel";
@@ -24,24 +23,10 @@ function Stat({ label, value }: { label: string; value: number }) {
   );
 }
 
+// Access control lives server-side in app/event/[slug]/organiser/page.tsx:
+// only the organizer who owns the event reaches this component.
 export function OrganiserDashboard({ slug }: { slug: string }) {
-  const { attendee, isLoading: sessionLoading } = useSession();
   const { dashboard } = useDashboard(slug);
-
-  if (!sessionLoading && (!attendee || attendee.role !== "ORGANISER")) {
-    return (
-      <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 max-w-xl">
-        <h2 className="font-semibold text-amber-900">Organiser access needed</h2>
-        <p className="text-sm text-amber-800 mt-1">
-          This live dashboard is for event organisers.{" "}
-          <Link href="/" className="underline">
-            Join the event
-          </Link>{" "}
-          and tick &ldquo;I&apos;m an organiser&rdquo; to view it.
-        </p>
-      </div>
-    );
-  }
 
   if (!dashboard) {
     return <p className="text-slate-500">Loading the live dashboard…</p>;

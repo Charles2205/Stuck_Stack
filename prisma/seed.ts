@@ -213,9 +213,15 @@ async function main() {
   await prisma.tag.deleteMany();
   await prisma.attendee.deleteMany();
   await prisma.event.deleteMany();
+  await prisma.organizer.deleteMany();
+
+  const organizer = await prisma.organizer.create({
+    data: { name: "Demo Organizer", nameKey: "demo organizer" },
+  });
 
   const event = await prisma.event.create({
     data: {
+      organizerId: organizer.id,
       name: "GitNation Conf 2026",
       slug: "gitnation-2026",
       date: new Date("2026-06-11T09:00:00Z"),
@@ -294,7 +300,10 @@ async function main() {
     stuckToos: await prisma.stuckToo.count(),
     helpOffers: await prisma.helpOffer.count(),
   };
-  console.log(`Seeded "${event.name}" (${event.slug}):`, counts);
+  console.log(
+    `Seeded "${event.name}" (${event.slug}) owned by "${organizer.name}":`,
+    counts,
+  );
 }
 
 main()

@@ -13,13 +13,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Event {
-  id        String     @id @default(cuid())
+model Organizer {
+  id        String   @id @default(cuid())
   name      String
-  slug      String     @unique
-  date      DateTime
-  attendees Attendee[]
-  blockers  Blocker[]
+  // Lowercased copy of name enforcing case-insensitive uniqueness (SQLite has
+  // no citext/insensitive mode in Prisma; same columns work on Postgres).
+  nameKey   String   @unique
+  createdAt DateTime @default(now())
+  events    Event[]
+}
+
+model Event {
+  id          String     @id @default(cuid())
+  organizerId String
+  name        String
+  slug        String     @unique
+  date        DateTime
+  createdAt   DateTime   @default(now())
+  organizer   Organizer  @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  attendees   Attendee[]
+  blockers    Blocker[]
+
+  @@index([organizerId])
 }
 
 model Attendee {

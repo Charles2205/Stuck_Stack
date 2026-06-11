@@ -30,12 +30,22 @@ export async function fetcher<T>(url: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export async function postJson<T>(url: string, body?: unknown): Promise<T> {
+async function sendJson<T>(
+  method: "POST" | "PATCH" | "DELETE",
+  url: string,
+  body?: unknown,
+): Promise<T> {
   const res = await fetch(url, {
-    method: "POST",
+    method,
     headers: { "Content-Type": "application/json" },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   if (!res.ok) throw await parseError(res);
   return res.json() as Promise<T>;
 }
+
+export const postJson = <T,>(url: string, body?: unknown) =>
+  sendJson<T>("POST", url, body);
+export const patchJson = <T,>(url: string, body?: unknown) =>
+  sendJson<T>("PATCH", url, body);
+export const deleteJson = <T,>(url: string) => sendJson<T>("DELETE", url);

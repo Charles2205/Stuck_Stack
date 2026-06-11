@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@progress/kendo-react-buttons";
-import { Badge, BadgeContainer } from "@progress/kendo-react-indicators";
+import { Badge } from "@progress/kendo-react-indicators";
 import {
   Card,
   CardActions,

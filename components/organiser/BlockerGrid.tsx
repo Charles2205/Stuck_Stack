@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { process, type State } from "@progress/kendo-data-query";
-import { Grid, GridColumn, GridColumnMenuFilter } from "@progress/kendo-react-grid";
+import { Grid, GridColumn, GridColumnMenuFilter, GridColumnMenuProps } from "@progress/kendo-react-grid";
 
-const ColumnMenu = (props: any) => {
+const ColumnMenu = (props: GridColumnMenuProps) => {
   return (
     <div>
       <GridColumnMenuFilter {...props} expanded={true} />

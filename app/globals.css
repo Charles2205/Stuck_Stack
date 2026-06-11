@@ -307,8 +307,8 @@ textarea.k-textarea {
 .k-card-actions-vertical {
   flex-flow: row wrap !important;
   flex-wrap: wrap !important;
-  gap: 8px !important;
-  padding: 12px 16px !important;
+  gap: 16px !important;
+  padding: 16px !important;
 }
 
 .k-dialog-titlebar {

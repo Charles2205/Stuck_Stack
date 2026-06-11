@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@progress/kendo-react-buttons";
-import { Badge } from "@progress/kendo-react-indicators";
+
 import {
   Card,
   CardActions,
@@ -101,15 +101,16 @@ export function WorkspaceHome({ organizer }: { organizer: OrganizerDTO }) {
                 </div>
               </div>
             </CardBody>
-            <CardActions className="flex flex-wrap gap-3 p-4 bg-[#fffbef] border-t-[4px] border-[#111]">
-              <Link href={`/event/${event.slug}`} className="flex-1 min-w-[120px]">
+            <CardActions className="flex flex-wrap gap-4 p-4 bg-[#fffbef] border-t-[4px] border-[#111]">
+              <Link href={`/event/${event.slug}`} className="flex flex-1 min-w-[120px]">
                 <Button className="w-full h-full">Open board</Button>
               </Link>
-              <Link href={`/event/${event.slug}/organiser`} className="flex-1 min-w-[120px]">
+              <Link href={`/event/${event.slug}/organiser`} className="flex flex-1 min-w-[120px]">
                 <Button themeColor="primary" className="w-full h-full">Dashboard</Button>
               </Link>
-              <Button onClick={() => setEditEvent(event)}>Edit</Button>
+              <Button className="flex-1 min-w-[100px]" onClick={() => setEditEvent(event)}>Edit</Button>
               <Button
+                className="flex-1 min-w-[100px]"
                 themeColor="error"
                 onClick={() => setDeleteEvent(event)}
               >

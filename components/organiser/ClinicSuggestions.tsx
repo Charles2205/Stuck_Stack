@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "@progress/kendo-react-indicators";
+
 import type { ClinicSuggestionDTO } from "@/lib/types";
 
 export function ClinicSuggestions({

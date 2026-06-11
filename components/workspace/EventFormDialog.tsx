@@ -5,7 +5,7 @@ import { Button } from "@progress/kendo-react-buttons";
 import { DatePicker } from "@progress/kendo-react-dateinputs";
 import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
 import { Input } from "@progress/kendo-react-inputs";
-import { Label } from "@progress/kendo-react-labels";
+
 import { patchJson, postJson } from "@/lib/hooks/fetcher";
 import type { WorkspaceEventDTO } from "@/lib/types";
 import { createEventSchema, updateEventSchema } from "@/lib/validation";

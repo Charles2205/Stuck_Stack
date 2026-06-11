@@ -61,6 +61,26 @@ export type DashboardDTO = {
   blockers: BlockerDTO[];
 };
 
+export type OrganizerDTO = {
+  id: string;
+  name: string;
+};
+
+export type WorkspaceEventDTO = {
+  id: string;
+  name: string;
+  slug: string;
+  date: string;
+  createdAt: string;
+  counts: {
+    blockers: number;
+    open: number;
+    matched: number;
+    solved: number;
+    attendees: number;
+  };
+};
+
 export type ApiErrorBody = {
   error: { code: string; message: string; details?: unknown };
 };

@@ -47,6 +47,7 @@ lib/
   constants.ts              status/role string-union constants
   api.ts                    JSON response + error helpers
   session.ts                attendee cookie helpers
+  organizerSession.ts       signed organizer cookie (HMAC) + getCurrentOrganizer()
   validation.ts             Zod schemas (shared by API + forms)
   types.ts                  DTO types shared between API and UI
   services/
@@ -54,25 +55,33 @@ lib/
     blockers.ts             list/create/stuck-too/solve
     offers.ts               offer help, claim slot
     dashboard.ts            aggregates + clinic suggestion engine
+    organizers.ts           sign up / sign in by unique name
+    workspaceEvents.ts      organizer-owned event CRUD + per-event aggregates
   hooks/
     useSession.ts           who am I (from /api/me)
     useBlockers.ts          board data, 3 s polling
     useDashboard.ts         dashboard data, 5 s polling
+    useWorkspaceEvents.ts   organizer's events (mutate-after-action)
 app/
-  page.tsx                  landing + join
+  page.tsx                  landing + join + "Organizer? Sign in" link
+  signin/page.tsx           organizer sign up / sign in
+  workspace/page.tsx        organizer home (event CRUD)
   event/[slug]/page.tsx     public board
-  event/[slug]/organiser/page.tsx  organiser dashboard
+  event/[slug]/organiser/page.tsx  owner-gated organiser dashboard
   api/...                   REST endpoints (see §4)
 components/
   JoinEventForm.tsx
   board/                    BlockerBoard, BlockerCard, TagFilter,
                             PostBlockerDialog, ClaimSlotDialog
   organiser/                BlockerGrid, CategoryChart, ClinicSuggestions
+  workspace/                SignInForm, WorkspaceHome, EventFormDialog,
+                            DeleteEventDialog
 ```
 
 ## 3. Data model
 
 ```
+Organizer 1──* Event
 Event 1──* Attendee
 Event 1──* Blocker *──* Tag
 Blocker 1──* StuckToo *──1 Attendee     (unique per attendee per blocker)
@@ -82,8 +91,9 @@ HelpOffer 1──1 HelpSlot
 
 | Model | Purpose | Notes |
 |---|---|---|
-| `Event` | multi-event ready; demo seeds one | unique `slug` used in URLs |
-| `Attendee` | lightweight identity | `role`: `ATTENDEE` \| `ORGANISER` |
+| `Organizer` | first-class event owner | `name` (display) + `nameKey` (lowercased, unique) — see §10 |
+| `Event` | multi-event; owned by an organizer | unique `slug` used in URLs; `organizerId`, `createdAt` |
+| `Attendee` | lightweight identity | `role`: `ATTENDEE` \| `ORGANISER` — legacy: organizer identity now lives in `Organizer`; the role flag remains only so attendee-organisers can still mark blockers solved on the board |
 | `Blocker` | the unit of the product | `status`: `OPEN` → `MATCHED` → `SOLVED` |
 | `Tag` | shared vocabulary, m:n with Blocker | `connectOrCreate` on post |
 | `StuckToo` | "me too" signal | `@@unique([blockerId, attendeeId])` — toggle |
@@ -112,6 +122,17 @@ No model or application code changes are required.
 | `POST /api/offers/[id]/claim` | claim 5-minute slot → blocker `MATCHED` |
 | `POST /api/blockers/[id]/solve` | author or organiser → `SOLVED` |
 | `GET  /api/events/[slug]/dashboard` | aggregates + clinic suggestions |
+| `POST /api/auth/signup` | create organizer, set signed session cookie |
+| `POST /api/auth/signin` | look up organizer by name, set cookie (404 if unknown → UI offers sign-up) |
+| `POST /api/auth/signout` | clear organizer cookie |
+| `GET  /api/auth/me` | current organizer (session hydration) |
+| `GET  /api/workspace/events` | current organizer's events with aggregate counts |
+| `POST /api/workspace/events` | create event owned by the session organizer |
+| `PATCH /api/workspace/events/[id]` | update name/date (ownership-checked) |
+| `DELETE /api/workspace/events/[id]` | delete event + cascade (ownership-checked) |
+
+Every `/api/workspace/*` route resolves the organizer from the **signed session
+cookie only** — a client-supplied organizer ID is never trusted.
 
 Conventions:
 - Every mutating endpoint validates its body with a Zod schema from `lib/validation.ts`.
@@ -160,6 +181,11 @@ For a conference demo, sign-up friction kills adoption. Joining = typing your na
 
 **Production replacement (documented path):** swap `lib/session.ts` for NextAuth (Auth.js) with an email-magic-link or conference-SSO provider. `Attendee` gains a `userId` link to NextAuth's `User`; `getSessionAttendee()` keeps its signature, so services and routes are untouched. QR codes on badges encoding a signed join token would preserve the zero-friction flow with real identity.
 
+Organizer accounts use a **separate, independent session** (different cookie,
+different helper module) — see §10. The two sessions never interact: a person
+can simultaneously be an attendee on the board and an organizer in the
+workspace.
+
 ## 8. KendoReact component map (judging checklist)
 
 | Component | Where | Role |
@@ -171,6 +197,7 @@ For a conference demo, sign-up friction kills adoption. Joining = typing your na
 | **Grid** | `organiser/BlockerGrid.tsx` | sortable, filterable view of all blockers |
 | **Chart** | `organiser/CategoryChart.tsx` | column chart of top blocker categories |
 | **Buttons/Inputs/Labels** | throughout | forms and actions |
+| **DatePicker** | `workspace/EventFormDialog.tsx` | event date when creating/editing events |
 | **Scheduler** | *not in MVP* | help-slot timeline is a simple list; swap point marked with `TODO(kendo-scheduler)` in `ClaimSlotDialog.tsx` |
 
 Grid and Chart are licensed components running under the KendoReact **trial** license for the hackathon (see README).
@@ -183,7 +210,61 @@ Grid and Chart are licensed components running under the KendoReact **trial** li
 - Zod schemas are the single source of truth for input shapes, reused by client forms for parity.
 - Seed data (`prisma/seed.ts`) makes the full demo script reproducible from a clean clone: `npm install && npx prisma migrate dev && npm run dev`.
 
-## 10. What we'd build next
+## 10. Organizer accounts & event workspace
+
+Organizers are first-class users who own and manage events (`feature/organizer-auth-workspace`).
+
+### Auth: name-only, signed cookie (demo-grade by design)
+
+Same philosophy as attendee join — zero friction:
+
+- **Sign up** = type a name → `Organizer` row → logged in. **Sign in** = type
+  your name → exact (case-insensitive) match logs in; no match → the UI offers
+  one-click sign-up with that name.
+- **Case-insensitive uniqueness:** Prisma on SQLite supports neither
+  `mode: "insensitive"` filters nor citext, so `Organizer` stores the display
+  `name` plus a lowercased `nameKey` with the `@unique` constraint. Lookups and
+  duplicate checks go through `nameKey`; the UI shows `name`. The same columns
+  work unchanged on Postgres.
+- **Session:** httpOnly, sameSite=lax cookie `organizer_session` holding
+  `"<organizerId>.<HMAC-SHA256 signature>"`, signed with `SESSION_SECRET`
+  (dev fallback baked in; set a real secret in production). No DB session
+  table — the signature is the proof. `lib/organizerSession.ts` exposes
+  `getCurrentOrganizer()` / `requireOrganizer()`; every protected route and
+  page resolves identity through these, never from request input.
+- The attendee cookie flow (§7) is untouched and fully independent.
+
+**Production upgrade path:** replace `lib/organizerSession.ts` with NextAuth
+(email magic links). `Organizer` gains `email` + a link to NextAuth's `User`;
+`getCurrentOrganizer()` keeps its signature so services, routes, and pages are
+untouched. Name-only sign-in disappears; everything else stays.
+
+### Pages & gating
+
+- `/signin` — one page for both flows (Kendo Input/Button, inline errors,
+  explicit "create it?" confirmation on unknown names).
+- `/workspace` — server component gate: no session → `redirect("/signin")`.
+  Lists the organizer's events as Kendo Cards with per-event counts
+  (blockers, open/matched/solved, attendees), plus create (Kendo Dialog +
+  DatePicker, Zod-validated, auto-generated editable slug), edit, and delete.
+- `/event/[slug]/organiser` — **owner-gated server-side**: no organizer
+  session → redirect to `/signin`; signed in but not the owner → 403 page.
+  The old attendee-role gate is gone (organizer identity lives in `Organizer`
+  now); the legacy `Attendee.role` flag only still allows marking blockers
+  solved on the board.
+
+### Why delete cascades (rather than blocking)
+
+Deleting an event cascades to its attendees, blockers, stuck-toos, offers and
+slots (the FKs already declared `onDelete: Cascade` from day one). Blocking
+deletion when blockers exist would strand demo/test events that accumulate a
+single blocker instantly, and an event's child rows are meaningless outside
+their event — there is nothing to preserve. The destructive action is guarded
+by an explicit confirm Dialog in the UI that states what will be deleted. In
+production we'd soft-delete (`archivedAt`) for recovery, noted here as the
+upgrade path.
+
+## 11. What we'd build next
 
 - **Real auth** — NextAuth magic links + badge QR join codes (§7).
 - **Push updates** — SSE/websocket swap behind the existing hooks (§5).

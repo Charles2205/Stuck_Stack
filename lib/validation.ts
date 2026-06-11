@@ -43,3 +43,37 @@ export const claimSlotSchema = z.object({
   startInMinutes: z.number().int().min(0).max(8 * 60).optional().default(15),
 });
 export type ClaimSlotInput = z.infer<typeof claimSlotSchema>;
+
+// --- Organizer auth + workspace ---
+
+export const organizerAuthSchema = z.object({
+  name: z.string().trim().min(2, "Name needs at least 2 characters").max(60),
+});
+export type OrganizerAuthInput = z.infer<typeof organizerAuthSchema>;
+
+const eventSlugSchema = z
+  .string()
+  .trim()
+  .min(3, "Slug needs at least 3 characters")
+  .max(60)
+  .regex(
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    "Use lowercase letters, numbers, and hyphens (e.g. gitnation-2026)",
+  );
+
+export const createEventSchema = z.object({
+  name: z.string().trim().min(3, "Give the event a name").max(80),
+  slug: eventSlugSchema,
+  date: z.coerce.date<Date>(),
+});
+export type CreateEventInput = z.infer<typeof createEventSchema>;
+
+export const updateEventSchema = z
+  .object({
+    name: z.string().trim().min(3).max(80).optional(),
+    date: z.coerce.date<Date>().optional(),
+  })
+  .refine((v) => v.name !== undefined || v.date !== undefined, {
+    message: "Nothing to update",
+  });
+export type UpdateEventInput = z.infer<typeof updateEventSchema>;

@@ -6,6 +6,7 @@ import { useDashboard } from "@/lib/hooks/useDashboard";
 import { useSession } from "@/lib/hooks/useSession";
 import { BlockerGrid } from "./BlockerGrid";
 import { ClinicSuggestions } from "./ClinicSuggestions";
+import { EventSharePanel } from "./EventSharePanel";
 
 // Kendo Charts pull in hammerjs, which touches `window` at module scope —
 // must be loaded client-side only.
@@ -61,6 +62,11 @@ export function OrganiserDashboard({ slug }: { slug: string }) {
           </p>
         </div>
       </header>
+
+      <EventSharePanel
+        slug={dashboard.event.slug}
+        eventName={dashboard.event.name}
+      />
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Stat label="Open blockers" value={dashboard.statusCounts.OPEN} />

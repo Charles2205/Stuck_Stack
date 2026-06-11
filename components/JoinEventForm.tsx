@@ -16,6 +16,7 @@ export function JoinEventForm({ slug }: { slug: string }) {
   const [error, setError] = useState<string | null>(null);
 
   const boardHref = `/event/${slug}`;
+  const attendeeJoinedThisEvent = attendee?.eventSlug === slug;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -36,7 +37,7 @@ export function JoinEventForm({ slug }: { slug: string }) {
 
   return (
     <div className="flex flex-col gap-3">
-      {attendee && (
+      {attendee && attendeeJoinedThisEvent && (
         <div className="flex flex-col gap-3">
           <p className="text-slate-600">
             You&apos;re in as <strong>{attendee.name}</strong>.
@@ -49,14 +50,23 @@ export function JoinEventForm({ slug }: { slug: string }) {
           </p>
         </div>
       )}
+      {attendee && !attendeeJoinedThisEvent && (
+        <p className="text-sm text-slate-500">
+          You are currently joined to another event as{" "}
+          <strong>{attendee.name}</strong>. Join this event below to switch.
+        </p>
+      )}
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <Input
-          value={name}
-          onChange={(e) => setName(String(e.value ?? ""))}
-          placeholder="Your name"
-          aria-label="Your name"
-          maxLength={60}
-        />
+        <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
+          Your name
+          <Input
+            value={name}
+            onChange={(e) => setName(String(e.value ?? ""))}
+            placeholder="Ada Lovelace"
+            aria-label="Your name"
+            maxLength={60}
+          />
+        </label>
         {error && <p className="text-sm text-red-600">{error}</p>}
         <Button
           type="submit"

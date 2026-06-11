@@ -30,7 +30,7 @@ Open <http://localhost:3000>:
 2. **Board** (`/event/gitnation-2026`): Kendo Cards full of seeded blockers. Filter by tag (MultiSelect), post your own blocker (Dialog), hit *"I'm stuck too"*, or *"I can help"* → *"Claim a 5-min slot"*.
 3. **Organizer?** Click *"Sign in to your workspace"* on the landing page (or go to `/signin`) and sign in as **Demo Organizer** — name only, no password. Unknown names get a one-click *"create it?"* offer.
 4. **Workspace** (`/workspace`): your events as Kendo Cards with live blocker/attendee counts — create (Kendo Dialog + DatePicker, auto-generated editable slug), edit, and delete (confirm Dialog; deletion cascades) events.
-5. **Organiser dashboard** (`/event/gitnation-2026/organiser`, owner-only): Kendo Grid of all blockers, Kendo Chart of demand by category, and live **suggested pop-up clinics**.
+5. **Organiser dashboard** (`/event/gitnation-2026/organiser`, owner-only): copy/share the event join link as a QR code, view the Kendo Grid of all blockers, Kendo Chart of demand by category, and live **suggested pop-up clinics**.
 
 **Demo script:** Sign in as *Demo Organizer* → workspace → open the *GitNation Conf 2026* dashboard. In a second (private) window, join as an attendee and click *"I'm stuck too"* on a blocker — the dashboard numbers move within ~5 seconds.
 

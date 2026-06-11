@@ -8,6 +8,7 @@ import { postJson } from "@/lib/hooks/fetcher";
 import { useBlockers } from "@/lib/hooks/useBlockers";
 import { useSession } from "@/lib/hooks/useSession";
 import type { BlockerDTO } from "@/lib/types";
+import { JoinEventForm } from "../JoinEventForm";
 import { BlockerCard } from "./BlockerCard";
 import { ClaimSlotDialog } from "./ClaimSlotDialog";
 import { PostBlockerDialog } from "./PostBlockerDialog";
@@ -37,6 +38,7 @@ export function BlockerBoard({
   const [claimBlockerId, setClaimBlockerId] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const eventAttendee = attendee?.eventSlug === slug ? attendee : null;
 
   const availableTags = useMemo(() => {
     const tags = new Set<string>(SUGGESTED_TAGS);
@@ -75,9 +77,9 @@ export function BlockerBoard({
         <div>
           <h1 className="text-2xl font-bold">{eventName}</h1>
           <p className="text-sm text-slate-500">
-            {attendee ? (
+            {eventAttendee ? (
               <>
-                Signed in as <strong>{attendee.name}</strong>
+                Signed in as <strong>{eventAttendee.name}</strong>
                 {" · "}
                 <Link href="/" className="underline">
                   switch
@@ -85,10 +87,8 @@ export function BlockerBoard({
               </>
             ) : (
               <>
-                <Link href="/" className="underline">
-                  Join the event
-                </Link>{" "}
-                to post and interact.
+                Join this event below to post blockers, mark stuck too, or offer
+                help.
               </>
             )}
           </p>
@@ -109,13 +109,34 @@ export function BlockerBoard({
           </Button>
           <Button
             themeColor="primary"
-            disabled={!attendee}
+            disabled={!eventAttendee}
             onClick={() => setShowPostDialog(true)}
           >
             + I&apos;m stuck on…
           </Button>
         </div>
       </header>
+
+      {!eventAttendee && (
+        <section
+          id="join-event"
+          className="grid grid-cols-1 gap-5 rounded-xl border border-indigo-200 bg-white p-5 shadow-sm lg:grid-cols-[1fr_minmax(280px,360px)]"
+        >
+          <div className="flex flex-col gap-2">
+            <h2 className="text-lg font-semibold text-slate-950">
+              Join {eventName}
+            </h2>
+            <p className="max-w-2xl text-sm leading-6 text-slate-600">
+              This event link is made for QR sharing. Join once, then post a
+              blocker, add a stuck-too signal, or offer a quick help slot from
+              the same board.
+            </p>
+          </div>
+          <div className="lg:border-l lg:border-slate-200 lg:pl-5">
+            <JoinEventForm slug={slug} />
+          </div>
+        </section>
+      )}
 
       {actionError && (
         <p className="rounded-md bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">
@@ -140,7 +161,7 @@ export function BlockerBoard({
                 <BlockerCard
                   key={blocker.id}
                   blocker={blocker}
-                  viewer={attendee}
+                  viewer={eventAttendee}
                   busy={busyId === blocker.id}
                   onStuckToo={handleStuckToo}
                   onOfferHelp={handleOfferHelp}

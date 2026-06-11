@@ -30,3 +30,15 @@ export const CLINIC_DURATION_MINUTES = 20;
 export const DEMO_EVENT_SLUG = "gitnation-2026";
 
 export const ATTENDEE_COOKIE = "attendeeId";
+
+/** Starter vocabulary shown in tag pickers; attendees can add their own. */
+export const SUGGESTED_TAGS = [
+  "AI/LLMs",
+  "RAG",
+  "AI Deployment",
+  "DevOps",
+  "Next.js",
+  "Databases",
+  "Pitching",
+] as const;
+

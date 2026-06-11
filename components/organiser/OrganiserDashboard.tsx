@@ -1,0 +1,82 @@
+"use client";
+
+import Link from "next/link";
+import { useDashboard } from "@/lib/hooks/useDashboard";
+import { useSession } from "@/lib/hooks/useSession";
+import { BlockerGrid } from "./BlockerGrid";
+import { CategoryChart } from "./CategoryChart";
+import { ClinicSuggestions } from "./ClinicSuggestions";
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-4">
+      <p className="text-3xl font-bold">{value}</p>
+      <p className="text-sm text-slate-500">{label}</p>
+    </div>
+  );
+}
+
+export function OrganiserDashboard({ slug }: { slug: string }) {
+  const { attendee, isLoading: sessionLoading } = useSession();
+  const { dashboard } = useDashboard(slug);
+
+  if (!sessionLoading && (!attendee || attendee.role !== "ORGANISER")) {
+    return (
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 max-w-xl">
+        <h2 className="font-semibold text-amber-900">Organiser access needed</h2>
+        <p className="text-sm text-amber-800 mt-1">
+          This live dashboard is for event organisers.{" "}
+          <Link href="/" className="underline">
+            Join the event
+          </Link>{" "}
+          and tick &ldquo;I&apos;m an organiser&rdquo; to view it.
+        </p>
+      </div>
+    );
+  }
+
+  if (!dashboard) {
+    return <p className="text-slate-500">Loading the live dashboard…</p>;
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">
+            {dashboard.event.name} — live dashboard
+          </h1>
+          <p className="text-sm text-slate-500">
+            Updates every few seconds ·{" "}
+            <Link href={`/event/${slug}`} className="underline">
+              back to the board
+            </Link>
+          </p>
+        </div>
+      </header>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <Stat label="Open blockers" value={dashboard.statusCounts.OPEN} />
+        <Stat label="Matched" value={dashboard.statusCounts.MATCHED} />
+        <Stat label="Solved" value={dashboard.statusCounts.SOLVED} />
+        <Stat label="Stuck-too signals" value={dashboard.totals.stuckToos} />
+        <Stat label="Help offers" value={dashboard.totals.offers} />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section className="rounded-xl border border-slate-200 bg-white p-5 flex flex-col gap-3">
+          <h2 className="font-semibold">Suggested pop-up clinics</h2>
+          <ClinicSuggestions clinics={dashboard.clinics} />
+        </section>
+        <section className="rounded-xl border border-slate-200 bg-white p-5">
+          <CategoryChart byTag={dashboard.byTag} />
+        </section>
+      </div>
+
+      <section className="rounded-xl border border-slate-200 bg-white p-5 flex flex-col gap-3">
+        <h2 className="font-semibold">All blockers</h2>
+        <BlockerGrid blockers={dashboard.blockers} />
+      </section>
+    </div>
+  );
+}

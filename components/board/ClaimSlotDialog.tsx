@@ -55,20 +55,20 @@ export function ClaimSlotDialog({ blocker, onClose, onClaimed }: Props) {
 
   return (
     <Dialog title="Claim a 5-minute help slot" onClose={onClose} width={420}>
-      <div className="flex flex-col gap-4 py-2">
-        <p className="text-sm text-slate-600">
-          You&apos;re helping with: <strong>{blocker.title}</strong>
+      <div className="flex flex-col gap-6 py-2">
+        <p className="text-base font-bold text-[#111] bg-[#ffd200] p-3 border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111]">
+          You&apos;re helping with: <strong className="font-black text-xl uppercase tracking-tighter block mt-1">{blocker.title}</strong>
         </p>
-        <div className="flex flex-col gap-1">
-          <Label>Where will you meet?</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="text-xl font-black uppercase tracking-tighter text-[#111]">Where will you meet?</Label>
           <Input
             value={location}
             onChange={(e) => setLocation(String(e.value ?? ""))}
             maxLength={100}
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label>Starting in (minutes from now)</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="text-xl font-black uppercase tracking-tighter text-[#111]">Starting in (minutes from now)</Label>
           <NumericTextBox
             value={startInMinutes}
             onChange={(e) => setStartInMinutes(e.value)}

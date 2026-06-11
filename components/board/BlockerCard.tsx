@@ -17,9 +17,9 @@ const STATUS_STYLE: Record<
   BlockerStatus,
   { border: string; label: string; theme: "info" | "warning" | "success" }
 > = {
-  OPEN: { border: "border-l-indigo-500", label: "Open", theme: "info" },
-  MATCHED: { border: "border-l-amber-500", label: "Matched", theme: "warning" },
-  SOLVED: { border: "border-l-emerald-500", label: "Solved", theme: "success" },
+  OPEN: { border: "border-l-[#00e5ff]", label: "Open", theme: "info" },
+  MATCHED: { border: "border-l-[#ff9100]", label: "Matched", theme: "warning" },
+  SOLVED: { border: "border-l-[#00e676]", label: "Solved", theme: "success" },
 };
 
 type Props = {
@@ -50,14 +50,23 @@ export function BlockerCard({
 
   return (
     <Card
-      className={`border-l-4 ${style.border} ${solved ? "opacity-70" : ""}`}
+      className={`border-l-8 ${style.border} ${solved ? "opacity-70" : ""}`}
     >
-      <CardHeader className="flex items-start justify-between gap-2">
+      <CardHeader className="flex flex-col gap-2 border-b-[3px] border-[#111] pb-3 mb-2">
+        <div>
+          <Badge
+            themeColor={style.theme}
+            rounded="medium"
+            cutoutBorder={false}
+          >
+            {style.label}
+          </Badge>
+        </div>
         <div className="min-w-0">
-          <CardTitle className="!text-base !font-semibold leading-snug">
+          <CardTitle className="!text-xl !font-black uppercase tracking-tighter leading-snug">
             {blocker.title}
           </CardTitle>
-          <CardSubtitle className="!text-xs">
+          <CardSubtitle className="!text-sm !font-bold text-[#111] mt-1 bg-[#ffd200] px-2 py-0.5 border-2 border-[#111] w-fit">
             {blocker.author.name} ·{" "}
             {new Date(blocker.createdAt).toLocaleTimeString([], {
               hour: "2-digit",
@@ -65,45 +74,33 @@ export function BlockerCard({
             })}
           </CardSubtitle>
         </div>
-        <Badge
-          themeColor={style.theme}
-          rounded="medium"
-          position="inside"
-          cutoutBorder={false}
-        >
-          {style.label}
-        </Badge>
       </CardHeader>
       <CardBody className="flex flex-col gap-3">
-        <p className="text-sm text-slate-600 line-clamp-3">
+        <p className="text-base text-[#111] font-bold leading-relaxed line-clamp-3">
           {blocker.description}
         </p>
         <div className="flex flex-wrap gap-1.5">
           {blocker.tags.map((tag) => (
             <span
               key={tag}
-              className="text-xs bg-slate-100 text-slate-700 rounded-full px-2 py-0.5"
+              className="text-xs bg-[#ffd200] text-[#111] font-bold border-2 border-[#111] px-2 py-0.5"
             >
               {tag}
             </span>
           ))}
         </div>
-        <div className="flex gap-6 text-sm text-slate-600">
-          <BadgeContainer>
-            <span className="pr-2">Stuck too</span>
-            <Badge themeColor="error" rounded="full" size="small">
-              {blocker.stuckCount}
-            </Badge>
-          </BadgeContainer>
-          <BadgeContainer>
-            <span className="pr-2">Helpers</span>
-            <Badge themeColor="success" rounded="full" size="small">
-              {blocker.helperCount}
-            </Badge>
-          </BadgeContainer>
+        <div className="flex gap-4 text-sm text-[#111] font-black uppercase tracking-wide">
+          <div className="flex items-center gap-2 border-[3px] border-[#111] px-2 py-1 shadow-[2px_2px_0px_0px_#111]">
+            <span>Stuck too</span>
+            <span className="bg-[#ff3d00] text-white px-2 py-0.5 border-2 border-[#111]">{blocker.stuckCount}</span>
+          </div>
+          <div className="flex items-center gap-2 border-[3px] border-[#111] px-2 py-1 shadow-[2px_2px_0px_0px_#111]">
+            <span>Helpers</span>
+            <span className="bg-[#00e676] text-[#111] px-2 py-0.5 border-2 border-[#111]">{blocker.helperCount}</span>
+          </div>
         </div>
         {blocker.slot && (
-          <p className="text-xs rounded-md bg-amber-50 border border-amber-200 text-amber-800 px-2 py-1.5">
+          <p className="text-xs bg-[#00e5ff] border-2 border-[#111] text-[#111] font-bold px-2 py-1.5 shadow-[2px_2px_0px_0px_#111]">
             <strong>{blocker.slot.helperName}</strong> helps at{" "}
             {new Date(blocker.slot.startTime).toLocaleTimeString([], {
               hour: "2-digit",
@@ -114,7 +111,10 @@ export function BlockerCard({
         )}
       </CardBody>
       {viewer && !solved && (
-        <CardActions className="flex flex-wrap gap-2">
+        <CardActions
+          className="flex flex-wrap gap-2"
+          style={{ flexFlow: "row wrap", flexWrap: "wrap", display: "flex", gap: "8px" }}
+        >
           {!blocker.viewerIsAuthor && (
             <Button
               size="small"

@@ -52,9 +52,9 @@ export function PostBlockerDialog({
 
   return (
     <Dialog title="What are you stuck on?" onClose={onClose} width={480}>
-      <div className="flex flex-col gap-4 py-2">
-        <div className="flex flex-col gap-1">
-          <Label>Title — be specific</Label>
+      <div className="flex flex-col gap-6 py-4">
+        <div className="flex flex-col gap-2">
+          <Label className="text-xl font-black uppercase tracking-tighter text-[#111]">Title — be specific</Label>
           <Input
             value={title}
             onChange={(e) => setTitle(String(e.value ?? ""))}
@@ -62,8 +62,8 @@ export function PostBlockerDialog({
             maxLength={120}
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label>What have you tried? What does failure look like?</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="text-xl font-black uppercase tracking-tighter text-[#111]">What have you tried? What does failure look like?</Label>
           <TextArea
             value={description}
             onChange={(e) => setDescription(String(e.value ?? ""))}
@@ -71,8 +71,8 @@ export function PostBlockerDialog({
             maxLength={1000}
           />
         </div>
-        <div className="flex flex-col gap-1">
-          <Label>Tags (pick or type your own)</Label>
+        <div className="flex flex-col gap-2">
+          <Label className="text-xl font-black uppercase tracking-tighter text-[#111]">Tags (pick or type your own)</Label>
           <MultiSelect
             data={availableTags}
             value={tags}

@@ -17,9 +17,9 @@ const CategoryChart = dynamic(
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4">
-      <p className="text-3xl font-bold">{value}</p>
-      <p className="text-sm text-slate-500">{label}</p>
+    <div className="brutal-box p-4 border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111] bg-[#ffd200] odd:bg-[#00e5ff] flex flex-col justify-between">
+      <p className="text-5xl lg:text-6xl font-black drop-shadow-[2px_2px_0px_#fff]">{value}</p>
+      <p className="text-sm lg:text-base font-extrabold text-[#111] uppercase tracking-widest mt-2 border-t-[3px] border-[#111] pt-2">{label}</p>
     </div>
   );
 }
@@ -30,11 +30,11 @@ export function OrganiserDashboard({ slug }: { slug: string }) {
 
   if (!sessionLoading && (!attendee || attendee.role !== "ORGANISER")) {
     return (
-      <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 max-w-xl">
-        <h2 className="font-semibold text-amber-900">Organiser access needed</h2>
-        <p className="text-sm text-amber-800 mt-1">
+      <div className="brutal-box bg-[#ff3d00] p-6 max-w-xl border-[4px] border-[#111] shadow-[6px_6px_0px_0px_#111] rotate-2">
+        <h2 className="font-extrabold text-white text-3xl uppercase tracking-tighter">Organiser access needed</h2>
+        <p className="text-lg font-bold text-white mt-2 bg-[#111] p-3 inline-block">
           This live dashboard is for event organisers.{" "}
-          <Link href="/" className="underline">
+          <Link href="/" className="underline font-black text-[#ffd200]">
             Join the event
           </Link>{" "}
           and tick &ldquo;I&apos;m an organiser&rdquo; to view it.
@@ -44,22 +44,26 @@ export function OrganiserDashboard({ slug }: { slug: string }) {
   }
 
   if (!dashboard) {
-    return <p className="text-slate-500">Loading the live dashboard…</p>;
+    return <p className="text-[#111] font-bold text-xl brutal-box bg-[#ffd200] w-fit px-4 py-2 border-[3px]">Loading the live dashboard…</p>;
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">
-            {dashboard.event.name} — live dashboard
+    <div className="flex flex-col gap-10">
+      <header className="flex flex-col items-start gap-4 mb-4">
+        <div className="brutal-box bg-[#ff3d00] p-6 lg:p-8 border-[4px] border-[#111] shadow-[8px_8px_0px_0px_#111] rotate-1 z-10">
+          <h1 className="text-4xl lg:text-6xl font-black text-white uppercase tracking-tighter drop-shadow-[3px_3px_0px_#111]">
+            {dashboard.event.name}
+            <br />
+            <span className="bg-white text-[#111] px-2 text-3xl lg:text-5xl drop-shadow-none border-[3px] border-[#111] mt-2 inline-block -rotate-2">
+              Live Dashboard
+            </span>
           </h1>
-          <p className="text-sm text-slate-500">
-            Updates every few seconds ·{" "}
-            <Link href={`/event/${slug}`} className="underline">
-              back to the board
-            </Link>
-          </p>
+        </div>
+        <div className="bg-white border-[3px] border-[#111] p-3 font-bold shadow-[4px_4px_0px_0px_#111] translate-x-4 -mt-2">
+          Updates every few seconds ·{" "}
+          <Link href={`/event/${slug}`} className="underline decoration-2 underline-offset-4 text-[#ff3d00]">
+            back to the board
+          </Link>
         </div>
       </header>
 
@@ -77,17 +81,17 @@ export function OrganiserDashboard({ slug }: { slug: string }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <section className="rounded-xl border border-slate-200 bg-white p-5 flex flex-col gap-3">
-          <h2 className="font-semibold">Suggested pop-up clinics</h2>
+        <section className="brutal-box bg-[#00e5ff] p-5 flex flex-col gap-3">
+          <h2 className="font-extrabold text-xl">Suggested pop-up clinics</h2>
           <ClinicSuggestions clinics={dashboard.clinics} />
         </section>
-        <section className="rounded-xl border border-slate-200 bg-white p-5">
+        <section className="brutal-box bg-white p-5">
           <CategoryChart byTag={dashboard.byTag} />
         </section>
       </div>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-5 flex flex-col gap-3">
-        <h2 className="font-semibold">All blockers</h2>
+      <section className="brutal-box bg-white p-5 flex flex-col gap-3">
+        <h2 className="font-extrabold text-xl">All blockers</h2>
         <BlockerGrid blockers={dashboard.blockers} />
       </section>
     </div>

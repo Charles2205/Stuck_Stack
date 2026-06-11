@@ -46,22 +46,31 @@ export function JoinEventForm({
 
   if (attendee && attendeeJoinedThisEvent) {
     return (
-      <div className="flex flex-col gap-3">
-        <p className="text-slate-600">
-          You&apos;re in as <strong>{attendee.name}</strong>
+      <div className="flex flex-col gap-4">
+        <p className="text-xl text-[#111] font-bold">
+          You&apos;re in as <strong className="text-2xl font-black bg-[#00e5ff] px-2 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111]">{attendee.name}</strong>
           {attendee.role === "ORGANISER" ? " (organiser)" : ""}.
         </p>
-        <div className="flex gap-2">
-          <Button themeColor="primary" onClick={() => router.push(boardHref)}>
+        <div className="flex flex-col gap-3 w-full">
+          <Button
+            themeColor="primary"
+            onClick={() => router.push(boardHref)}
+            className="w-full"
+            style={{ width: "100%" }}
+          >
             Open the blocker board
           </Button>
           {attendee.role === "ORGANISER" && (
-            <Button onClick={() => router.push(organiserHref)}>
+            <Button
+              onClick={() => router.push(organiserHref)}
+              className="w-full"
+              style={{ width: "100%" }}
+            >
               Organiser dashboard
             </Button>
           )}
         </div>
-        <p className="text-sm text-slate-500">
+        <p className="text-base font-bold text-[#111] bg-[#ffd200] p-2 border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111] w-fit">
           Not you? Join again below with a different name.
         </p>
         <RawJoinForm
@@ -80,10 +89,10 @@ export function JoinEventForm({
 
   if (attendee && !attendeeJoinedThisEvent) {
     return (
-      <div className="flex flex-col gap-3">
-        <p className="text-sm text-slate-500">
+      <div className="flex flex-col gap-4">
+        <p className="text-lg font-bold text-[#111] bg-[#ff3d00] text-white p-3 border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111]">
           You are currently joined to another event as{" "}
-          <strong>{attendee.name}</strong>. Join this event below to switch.
+          <strong className="bg-[#111] text-[#ffd200] px-2 py-1">{attendee.name}</strong>. Join this event below to switch.
         </p>
         <RawJoinForm
           name={name}
@@ -124,8 +133,8 @@ function RawJoinForm(props: {
   allowOrganiserJoin: boolean;
 }) {
   return (
-    <form onSubmit={props.onSubmit} className="flex flex-col gap-3">
-      <label className="flex flex-col gap-1 text-sm font-medium text-slate-700">
+    <form onSubmit={props.onSubmit} className="flex flex-col gap-5 mt-2">
+      <label className="flex flex-col gap-2 text-xl font-black uppercase tracking-tighter text-[#111]">
         Your name
         <Input
           value={props.name}
@@ -139,7 +148,7 @@ function RawJoinForm(props: {
         <Checkbox
           checked={props.organiser}
           onChange={(e) => props.setOrganiser(Boolean(e.value))}
-          label="I'm an organiser (opens the live dashboard)"
+          label="I'm an organiser"
         />
       )}
       {props.error && <p className="text-sm text-red-600">{props.error}</p>}

@@ -21,30 +21,47 @@ export function CategoryChart({ byTag }: { byTag: TagStatDTO[] }) {
   const categories = top.map((t) => t.tag);
 
   return (
-    <Chart style={{ height: 320 }}>
-      <ChartTitle text="Where people are stuck (open demand by tag)" />
-      <ChartLegend position="bottom" />
+    <Chart style={{ height: 360, background: "transparent" }}>
+      <ChartTitle
+        text="Where people are stuck"
+        font="900 24px var(--font-sans), sans-serif"
+        color="#111"
+        margin={{ bottom: 24 }}
+      />
+      <ChartLegend
+        position="bottom"
+        labels={{ font: "800 16px var(--font-sans), sans-serif", color: "#111" }}
+      />
       <ChartCategoryAxis>
         <ChartCategoryAxisItem
           categories={categories}
-          labels={{ rotation: "auto" }}
+          labels={{ font: "800 14px var(--font-sans), sans-serif", color: "#111", rotation: "auto" }}
+          majorGridLines={{ visible: false }}
+          line={{ width: 4, color: "#111" }}
         />
       </ChartCategoryAxis>
       <ChartValueAxis>
-        <ChartValueAxisItem majorUnit={5} />
+        <ChartValueAxisItem
+          majorUnit={5}
+          labels={{ font: "800 14px var(--font-sans), sans-serif", color: "#111" }}
+          majorGridLines={{ color: "#111", width: 2, dashType: "solid" }}
+          line={{ width: 4, color: "#111" }}
+        />
       </ChartValueAxis>
       <ChartSeries>
         <ChartSeriesItem
           type="column"
           name="Demand (blockers + stuck-too)"
           data={top.map((t) => t.demand)}
-          color="#6366f1"
+          color="#ff3d00"
+          border={{ width: 3, color: "#111" }}
         />
         <ChartSeriesItem
           type="column"
           name="Helpers available"
           data={top.map((t) => t.helpers)}
-          color="#10b981"
+          color="#00e5ff"
+          border={{ width: 3, color: "#111" }}
         />
       </ChartSeries>
     </Chart>

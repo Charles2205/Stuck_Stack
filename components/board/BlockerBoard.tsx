@@ -72,16 +72,16 @@ export function BlockerBoard({
     runAction(b.id, () => postJson(`/api/blockers/${b.id}/solve`));
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">{eventName}</h1>
-          <p className="text-sm text-slate-500">
+    <div className="flex flex-col gap-10 lg:gap-12">
+      <header className="flex flex-col lg:flex-row items-stretch justify-between gap-8 mb-4 relative">
+        <div className="brutal-box bg-[#00e676] p-6 lg:p-8 flex-1 shadow-[8px_8px_0px_0px_#111] border-[4px] border-[#111] z-10 -rotate-1">
+          <h1 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter drop-shadow-[3px_3px_0px_#fff]">{eventName}</h1>
+          <p className="text-lg font-bold text-[#111] mt-4 bg-white p-2 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111] w-fit">
             {eventAttendee ? (
               <>
-                Signed in as <strong>{eventAttendee.name}</strong>
+                Signed in as <strong className="text-[#ff3d00] text-xl">{eventAttendee.name}</strong>
                 {" · "}
-                <Link href="/" className="underline">
+                <Link href="/" className="underline decoration-2 underline-offset-4">
                   switch
                 </Link>
                 {eventAttendee.role === "ORGANISER" && (
@@ -89,7 +89,7 @@ export function BlockerBoard({
                     {" · "}
                     <Link
                       href={`/event/${slug}/organiser`}
-                      className="underline"
+                      className="underline decoration-2 underline-offset-4"
                     >
                       organiser dashboard
                     </Link>
@@ -104,53 +104,55 @@ export function BlockerBoard({
             )}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <TagFilter
-            available={availableTags}
-            selected={selectedTags}
-            onChange={setSelectedTags}
-          />
-          <Button
-            togglable
-            selected={sort === "stuck"}
-            onClick={() => setSort(sort === "stuck" ? "recent" : "stuck")}
-            title="Toggle between most-stuck-first and newest-first"
-          >
-            {sort === "stuck" ? "Most stuck first" : "Newest first"}
-          </Button>
-          <Button
-            themeColor="primary"
-            disabled={!eventAttendee}
-            onClick={() => setShowPostDialog(true)}
-          >
-            + I&apos;m stuck on…
-          </Button>
+        <div className="flex flex-col gap-4 justify-end min-w-[300px] z-10 rotate-1">
+          <div className="brutal-box bg-white p-4 flex flex-col gap-3 border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111]">
+            <TagFilter
+              available={availableTags}
+              selected={selectedTags}
+              onChange={setSelectedTags}
+            />
+            <Button
+              togglable
+              selected={sort === "stuck"}
+              onClick={() => setSort(sort === "stuck" ? "recent" : "stuck")}
+              title="Toggle between most-stuck-first and newest-first"
+            >
+              {sort === "stuck" ? "Most stuck first" : "Newest first"}
+            </Button>
+            <Button
+              themeColor="primary"
+              disabled={!eventAttendee}
+              onClick={() => setShowPostDialog(true)}
+            >
+              + I&apos;m stuck on…
+            </Button>
+          </div>
         </div>
       </header>
 
       {!eventAttendee && (
         <section
           id="join-event"
-          className="grid grid-cols-1 gap-5 rounded-xl border border-indigo-200 bg-white p-5 shadow-sm lg:grid-cols-[1fr_minmax(280px,360px)]"
+          className="grid grid-cols-1 gap-5 brutal-box bg-[#ffd200] p-5 lg:grid-cols-[1fr_minmax(280px,360px)]"
         >
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-semibold text-slate-950">
+            <h2 className="text-2xl font-extrabold text-[#111] uppercase drop-shadow-[2px_2px_0px_#fff]">
               Join {eventName}
             </h2>
-            <p className="max-w-2xl text-sm leading-6 text-slate-600">
+            <p className="max-w-2xl text-base font-bold leading-6 text-[#111]">
               This event link is made for QR sharing. Join once, then post a
               blocker, add a stuck-too signal, or offer a quick help slot from
               the same board.
             </p>
           </div>
-          <div className="lg:border-l lg:border-slate-200 lg:pl-5">
+          <div className="lg:border-l-[3px] lg:border-[#111] lg:pl-5">
             <JoinEventForm slug={slug} allowOrganiserJoin={false} />
           </div>
         </section>
       )}
 
       {actionError && (
-        <p className="rounded-md bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2">
+        <p className="brutal-box bg-[#ff3d00] text-[#111] font-bold text-sm px-3 py-2">
           {actionError}
         </p>
       )}
@@ -164,7 +166,7 @@ export function BlockerBoard({
         if (group.length === 0) return null;
         return (
           <section key={status} className="flex flex-col gap-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            <h2 className="text-xl font-extrabold uppercase tracking-widest text-[#111] bg-[#00e5ff] w-full px-4 py-3 brutal-box border-b-8 mb-4 translate-x-[-10px]">
               {heading} ({group.length})
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

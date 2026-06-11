@@ -16,6 +16,14 @@ npm run dev
 
 > If the seed didn't run (or you want a clean demo state): `npx prisma db seed`
 
+**Checks** (run on every PR via GitHub Actions — `.github/workflows/ci.yml`):
+
+```bash
+npm run lint        # ESLint
+npm run typecheck   # tsc --noEmit (strict)
+npm test            # Vitest unit tests (session token signing, Zod schemas)
+```
+
 Open <http://localhost:3000>:
 
 1. **Join** the seeded event ("GitNation Conf 2026") with just your name.

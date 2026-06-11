@@ -5,36 +5,17 @@
 // email magic links; getCurrentOrganizer() keeps its signature
 // (docs/ARCHITECTURE.md §10).
 
-import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import type { Organizer } from "@prisma/client";
 import { ApiError } from "./api";
 import { prisma } from "./db";
+import { createToken, verifyToken } from "./signedToken";
 
 export const ORGANIZER_COOKIE = "organizer_session";
 
-const SECRET =
-  process.env.SESSION_SECRET ?? "stuck-stack-dev-secret-set-me-in-production";
-
-function sign(value: string): string {
-  return createHmac("sha256", SECRET).update(value).digest("base64url");
-}
-
-function verifyToken(token: string): string | null {
-  const dot = token.lastIndexOf(".");
-  if (dot <= 0) return null;
-  const id = token.slice(0, dot);
-  const signature = token.slice(dot + 1);
-  const expected = sign(id);
-  const a = Buffer.from(signature);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
-  return id;
-}
-
 export async function setOrganizerCookie(organizerId: string): Promise<void> {
   const store = await cookies();
-  store.set(ORGANIZER_COOKIE, `${organizerId}.${sign(organizerId)}`, {
+  store.set(ORGANIZER_COOKIE, createToken(organizerId), {
     httpOnly: true,
     sameSite: "lax",
     path: "/",

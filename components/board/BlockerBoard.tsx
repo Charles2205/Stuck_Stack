@@ -3,24 +3,18 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Button } from "@progress/kendo-react-buttons";
-import { BLOCKER_STATUS, SUGGESTED_TAGS, type BlockerStatus } from "@/lib/constants";
+import { SUGGESTED_TAGS } from "@/lib/constants";
 import { postJson } from "@/lib/hooks/fetcher";
 import { useBlockers } from "@/lib/hooks/useBlockers";
 import { useBoardNotifications } from "@/lib/hooks/useBoardNotifications";
 import { useSession } from "@/lib/hooks/useSession";
 import type { BlockerDTO } from "@/lib/types";
 import { JoinEventForm } from "../JoinEventForm";
-import { BlockerCard } from "./BlockerCard";
+import { BlockerTaskBoard } from "./BlockerTaskBoard";
 import { BoardToastHost } from "./BoardToastHost";
 import { ClaimSlotDialog } from "./ClaimSlotDialog";
 import { PostBlockerDialog } from "./PostBlockerDialog";
 import { TagFilter } from "./TagFilter";
-
-const SECTIONS: { status: BlockerStatus; heading: string }[] = [
-  { status: BLOCKER_STATUS.OPEN, heading: "Open blockers" },
-  { status: BLOCKER_STATUS.MATCHED, heading: "Matched — help on the way" },
-  { status: BLOCKER_STATUS.SOLVED, heading: "Solved" },
-];
 
 export function BlockerBoard({
   slug,
@@ -209,31 +203,19 @@ export function BlockerBoard({
         <p className="text-slate-500">Loading the board…</p>
       )}
 
-      {SECTIONS.map(({ status, heading }) => {
-        const group = (blockers ?? []).filter((b) => b.status === status);
-        if (group.length === 0) return null;
-        return (
-          <section key={status} className="flex flex-col gap-3">
-            <h2 className="text-xl font-extrabold uppercase tracking-widest text-[#111] bg-[#00e5ff] w-full px-4 py-3 brutal-box border-b-8 mb-4 translate-x-[-10px]">
-              {heading} ({group.length})
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {group.map((blocker) => (
-                <BlockerCard
-                  key={blocker.id}
-                  blocker={blocker}
-                  viewer={eventAttendee}
-                  busy={busyId === blocker.id}
-                  onStuckToo={handleStuckToo}
-                  onOfferHelp={handleOfferHelp}
-                  onClaimSlot={(b) => setClaimBlockerId(b.id)}
-                  onSolve={handleSolve}
-                />
-              ))}
-            </div>
-          </section>
-        );
-      })}
+      {blockers && blockers.length > 0 && (
+        <BlockerTaskBoard
+          blockers={blockers}
+          personalView={eventAttendee !== null}
+          sort={sort}
+          viewer={eventAttendee}
+          busyId={busyId}
+          onStuckToo={handleStuckToo}
+          onOfferHelp={handleOfferHelp}
+          onClaimSlot={(b) => setClaimBlockerId(b.id)}
+          onSolve={handleSolve}
+        />
+      )}
 
       {blockers && blockers.length === 0 && (
         <p className="text-slate-500">

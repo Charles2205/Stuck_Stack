@@ -174,6 +174,41 @@ On a blocker card, **I'm stuck too** and **I can help** could both appear at onc
 
 ---
 
+### Change #6 — Kendo TaskBoard grouping on the blocker board
+
+**Status:** `done`  
+**Raised:** June 2026
+
+#### Problem
+
+The board was a long vertical scroll grouped only by OPEN / MATCHED / SOLVED. Hard to spot **your** blockers, ones you're **stuck on**, or ones you're **helping with**.
+
+#### Solution
+
+Replaced the vertical grid with **Kendo TaskBoard** horizontal lanes (`@progress/kendo-react-taskboard`):
+
+**Joined attendees (personal view):**
+
+| Column | Contents |
+|---|---|
+| My blockers | `viewerIsAuthor` |
+| Stuck with me | `viewerStuckToo` |
+| I'm helping | `viewerOffer` |
+| Open / Matched / Solved | Everyone else's blockers by status |
+
+**Organizer preview / not joined:** Open · Matched · Solved only.
+
+Each lane scrolls vertically; the board scrolls horizontally. Custom brutal column headers, add/edit/drag disabled (columns are computed, not user-editable). Existing `BlockerCard` renders inside TaskBoard cards.
+
+#### Files changed
+
+- `@progress/kendo-react-taskboard` (dependency)
+- `lib/board/taskboardColumns.ts`, `components/board/BlockerTaskBoard.tsx`, `BlockerTaskBoardParts.tsx`
+- `components/board/BlockerBoard.tsx`, `app/globals.css`
+- `tests/taskboardColumns.test.ts`
+
+---
+
 ## Summary
 
 | # | Change | Status |
@@ -183,6 +218,7 @@ On a blocker card, **I'm stuck too** and **I can help** could both appear at onc
 | 3 | Organizer viewing own event board (owner-aware UI) | `done` |
 | 4 | Board toast notifications with sound | `done` |
 | 5 | Stuck-too vs help button states (mutually exclusive) | `done` |
+| 6 | Kendo TaskBoard personal/status lanes | `done` |
 
 ---
 

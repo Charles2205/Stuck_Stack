@@ -44,3 +44,8 @@ next-env.d.ts
 prisma/*.db
 prisma/*.db-journal
 !.env.example
+.vercel
+.env*
+
+# KendoReact license key (never commit)
+telerik-license.txt

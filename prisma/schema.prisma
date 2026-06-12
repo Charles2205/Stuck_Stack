@@ -1,16 +1,18 @@
 // Stuck Stack data model.
-// SQLite for local dev; Postgres-compatible by design — switch the provider
-// and DATABASE_URL to deploy on Vercel + Neon/Supabase (see docs/ARCHITECTURE.md §3).
-// Status/role fields are String (not enum) because Prisma has no enum support
-// on SQLite; values are constrained in lib/constants.ts and validated with Zod.
+// Postgres (Neon via Vercel Marketplace) for dev and prod; DATABASE_URL comes
+// from `vercel env pull .env` (see docs/ARCHITECTURE.md §3).
+// Status/role fields are String (not enum) — a relic of the SQLite dev phase,
+// kept for simplicity; values are constrained in lib/constants.ts and
+// validated with Zod.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // pooled (Neon) — runtime queries
+  directUrl = env("DATABASE_URL_UNPOOLED") // direct — migrations
 }
 
 model Organizer {

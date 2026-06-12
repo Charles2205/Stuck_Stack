@@ -1,0 +1,4 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npx kendo-ui-license activate || echo 'Kendo license not activated (set TELERIK_LICENSE) — building with trial watermark'; npx prisma migrate deploy && next build"
+}

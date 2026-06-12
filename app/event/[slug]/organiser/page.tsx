@@ -19,18 +19,18 @@ export default async function OrganiserPage({
   if (event.organizerId !== organizer.id) {
     return (
       <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-8">
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-6 max-w-xl">
-          <h2 className="font-semibold text-amber-900">
+        <div className="brutal-box border-[4px] border-[#111] bg-[#ff3d00] p-8 max-w-xl shadow-[8px_8px_0px_0px_#111] rotate-1">
+          <h2 className="text-3xl font-black uppercase tracking-tighter text-white drop-shadow-[2px_2px_0px_#111]">
             This isn&apos;t your event
           </h2>
-          <p className="text-sm text-amber-800 mt-1">
-            The live dashboard for <strong>{event.name}</strong> is only
+          <p className="text-lg font-bold text-[#111] mt-4 bg-white p-4 border-[3px] border-[#111]">
+            The live dashboard for <strong className="bg-[#ffd200] px-1 border-2 border-[#111]">{event.name}</strong> is only
             available to the organizer who owns it. You&apos;re signed in as{" "}
-            <strong>{organizer.name}</strong>.{" "}
-            <Link href="/workspace" className="underline">
+            <strong className="bg-[#00e5ff] px-1 border-2 border-[#111]">{organizer.name}</strong>.{" "}
+            <br/><br/>
+            <Link href="/workspace" className="underline decoration-2 underline-offset-4 text-[#ff3d00] hover:bg-[#111] hover:text-white transition-colors">
               Back to your workspace
             </Link>
-            .
           </p>
         </div>
       </main>

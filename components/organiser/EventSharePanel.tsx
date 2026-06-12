@@ -79,22 +79,22 @@ export function EventSharePanel({
   }
 
   return (
-    <section className="grid grid-cols-1 gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center">
+    <section className="grid grid-cols-1 gap-5 brutal-box bg-[#ffd200] p-6 lg:p-8 lg:grid-cols-[1fr_auto] lg:items-center shadow-[6px_6px_0px_0px_#111] border-[4px] border-[#111]">
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-lg font-semibold text-slate-950">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-3xl font-black text-[#111] uppercase tracking-tighter drop-shadow-[2px_2px_0px_#fff]">
             Share the event join QR
           </h2>
-          <p className="max-w-2xl text-sm leading-6 text-slate-600">
+          <p className="max-w-2xl text-base font-bold leading-6 text-[#111]">
             Put this QR code on a slide, screen, or printed sign. Participants
             open the event board from it, join by name, then post blockers or
             offer help.
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
-          <p className="text-xs font-medium text-slate-500">Join link</p>
-          <p className="break-all font-mono text-sm text-slate-800">
+        <div className="brutal-box bg-white px-4 py-3 border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111]">
+          <p className="text-sm font-extrabold text-[#111] uppercase tracking-widest mb-1">Join link</p>
+          <p className="break-all font-mono text-base font-bold text-[#ff3d00]">
             {shareUrl}
           </p>
         </div>
@@ -108,13 +108,13 @@ export function EventSharePanel({
           </Button>
           <Link
             href={joinPath}
-            className="inline-flex min-h-9 items-center rounded-md px-3 text-sm font-medium text-indigo-700 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="inline-flex min-h-9 items-center brutal-box bg-[#00e5ff] px-4 py-2 text-base font-black uppercase tracking-wider text-[#111] hover:bg-[#00b2cc] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black shadow-[4px_4px_0px_0px_#111]"
           >
             Open join page
           </Link>
         </div>
 
-        <p aria-live="polite" className="min-h-5 text-sm text-slate-500">
+        <p aria-live="polite" className="min-h-5 text-sm font-bold text-[#111]">
           {copyState === "error"
             ? "Could not copy the link. Select the join link above instead."
             : copyState === "copied"
@@ -124,7 +124,7 @@ export function EventSharePanel({
       </div>
 
       <div className="flex w-full justify-center lg:w-auto">
-        <div className="rounded-lg border border-slate-200 bg-white p-3">
+        <div className="brutal-box bg-white p-4 border-[4px] border-[#111] shadow-[8px_8px_0px_0px_#111] rotate-2">
           <QRCodeSVG
             ref={qrRef}
             value={shareUrl}
@@ -132,9 +132,9 @@ export function EventSharePanel({
             level="M"
             marginSize={2}
             bgColor="#ffffff"
-            fgColor="#0f172a"
+            fgColor="#111111"
             title={`${eventName} join QR code`}
-            className="h-44 w-44 sm:h-48 sm:w-48"
+            className="h-44 w-44 sm:h-56 sm:w-56"
           />
         </div>
       </div>

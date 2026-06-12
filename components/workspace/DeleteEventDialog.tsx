@@ -31,17 +31,17 @@ export function DeleteEventDialog({ event, onClose, onDeleted }: Props) {
 
   return (
     <Dialog title="Delete event?" onClose={onClose} width={420}>
-      <div className="flex flex-col gap-3 py-2">
-        <p className="text-slate-700">
-          Delete <strong>{event.name}</strong> permanently?
+      <div className="flex flex-col gap-4 py-4">
+        <p className="text-xl font-bold text-[#111]">
+          Delete <strong className="bg-[#ff3d00] text-white px-2 py-0.5 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111]">{event.name}</strong> permanently?
         </p>
-        <p className="text-sm rounded-md bg-red-50 border border-red-200 text-red-700 px-3 py-2">
+        <p className="text-base font-bold bg-[#ffd200] border-[3px] border-[#111] text-[#111] p-3 shadow-[4px_4px_0px_0px_#111]">
           This also deletes its {event.counts.blockers} blocker
           {event.counts.blockers === 1 ? "" : "s"}, {event.counts.attendees}{" "}
           attendee{event.counts.attendees === 1 ? "" : "s"}, and all stuck-too
-          signals, help offers, and slots. There is no undo.
+          signals, help offers, and slots. <br/><span className="text-[#ff3d00] font-black uppercase mt-1 inline-block bg-[#111] px-1">There is no undo.</span>
         </p>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">{error}</p>}
       </div>
       <DialogActionsBar>
         <Button onClick={onClose} disabled={submitting}>

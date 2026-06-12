@@ -12,10 +12,9 @@ const BOARD_POLL_MS = 3000;
 
 export function useBlockers(
   slug: string,
-  options: { tags: string[]; sort: "stuck" | "recent" },
+  options: { sort: "stuck" | "recent" },
 ) {
   const params = new URLSearchParams();
-  if (options.tags.length > 0) params.set("tags", options.tags.join(","));
   params.set("sort", options.sort);
 
   const { data, error, isLoading, mutate } = useSWR<{ blockers: BlockerDTO[] }>(

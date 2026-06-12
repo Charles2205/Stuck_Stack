@@ -68,25 +68,51 @@ export default async function LandingPage() {
                   </p>
                 </div>
                 <JoinEventForm slug={event.slug} />
-                <div className="mt-4 pt-4 border-t-[3px] border-[#111]">
-                  <p className="text-base font-bold text-[#111]">
-                    Organizer?{" "}
-                    <Link href="/signin" className="underline text-[#111] hover:text-white hover:bg-[#ff3d00] bg-[#ffd200] px-1 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111] transition-colors">
-                      Sign in to your workspace
-                    </Link>
-                  </p>
-                </div>
               </>
             ) : (
-              <div className="py-8 text-center">
-                <p className="text-[#111] text-xl font-extrabold mb-4">
-                  No event seeded yet.
+              <div className="flex flex-col gap-5">
+                <div className="border-b-[3px] border-[#111] pb-4">
+                  <h2 className="text-3xl font-extrabold uppercase">Get started</h2>
+                  <p className="text-lg font-bold text-[#111] mt-2">
+                    No events are live on this install yet. Organizers can sign in
+                    and create one — attendees join from the event link or QR
+                    code their organizer shares.
+                  </p>
+                </div>
+                <div className="brutal-box bg-[#ffd200] p-5 border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111] flex flex-col gap-3">
+                  <p className="text-base font-extrabold uppercase tracking-widest">
+                    Running an event?
+                  </p>
+                  <p className="text-base font-bold text-[#111]">
+                    Sign in or create an organizer account, then create your
+                    first event in the workspace.
+                  </p>
+                  <Link
+                    href="/signin"
+                    className="inline-flex w-fit min-h-10 items-center brutal-box bg-[#ff3d00] px-5 py-2 text-base font-black uppercase tracking-wider text-white hover:bg-[#111] transition-colors border-[3px] border-[#111] shadow-[4px_4px_0px_0px_#111]"
+                  >
+                    Sign in to your workspace
+                  </Link>
+                </div>
+                <p className="text-base font-bold text-[#111]">
+                  Attending? Open the join link or scan the QR code from your
+                  organizer — you don&apos;t need anything on this page.
                 </p>
-                <code className="bg-[#ffd200] border-[3px] border-[#111] px-3 py-2 text-lg font-bold shadow-[4px_4px_0px_0px_#111]">
-                  npx prisma db seed
-                </code>
               </div>
             )}
+            <div className="mt-2 pt-4 border-t-[3px] border-[#111]">
+              {event &&
+                <p className="text-base font-bold text-[#111]">
+                  Organizer?{" "}
+                  <Link
+                    href="/signin"
+                    className="underline text-[#111] hover:text-white hover:bg-[#ff3d00] bg-[#ffd200] px-1 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111] transition-colors"
+                  >
+                    Sign in to your workspace
+                  </Link>
+                </p>
+              }
+            </div>
           </div>
         </div>
       </div>

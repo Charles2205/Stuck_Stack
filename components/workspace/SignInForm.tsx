@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@progress/kendo-react-buttons";
-import { Input } from "@progress/kendo-react-inputs";
 import { FetchError, postJson } from "@/lib/hooks/fetcher";
 import type { OrganizerDTO } from "@/lib/types";
+import { Button } from "@progress/kendo-react-buttons";
+import { Input } from "@progress/kendo-react-inputs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type Phase = "input" | "offer-signup";
 
@@ -53,14 +53,24 @@ export function SignInForm() {
     }
   }
 
+  const trimmedName = name.trim();
+  const canContinue = trimmedName.length >= 2 && !submitting;
+
   if (phase === "offer-signup") {
     return (
       <div className="flex flex-col gap-6">
         <p className="text-lg font-bold text-[#111]">
-          No organizer named <strong className="bg-[#00e5ff] px-2 py-0.5 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111] mx-1">{name.trim()}</strong> yet. Create the
-          account?
+          No organizer named{" "}
+          <strong className="bg-[#00e5ff] px-2 py-0.5 border-2 border-[#111] shadow-[2px_2px_0px_0px_#111] mx-1">
+            {name.trim()}
+          </strong>{" "}
+          yet. Create the account?
         </p>
-        {error && <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">{error}</p>}
+        {error && (
+          <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">
+            {error}
+          </p>
+        )}
         <div className="flex flex-col gap-4">
           <Button
             themeColor="primary"
@@ -90,21 +100,32 @@ export function SignInForm() {
         <Input
           value={name}
           onChange={(e) => setName(String(e.value ?? ""))}
+          onInput={(e) => setName(e.currentTarget.value)}
           placeholder="Ada Lovelace"
           aria-label="Organizer name"
+          autoComplete="name"
           maxLength={60}
         />
       </label>
       <p className="text-sm font-bold text-[#111] bg-[#ffd200] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">
-        Names are unique (case-insensitive). New name? We&apos;ll offer to
-        create it.
+        At least 2 characters. Names are unique (case-insensitive). New name?
+        We&apos;ll offer to create it.
       </p>
-      {error && <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">{error}</p>}
+      {trimmedName.length === 1 && (
+        <p className="text-sm font-bold text-[#111]">
+          One more character to continue.
+        </p>
+      )}
+      {error && (
+        <p className="text-base font-bold text-white bg-[#ff3d00] border-[3px] border-[#111] p-2 shadow-[2px_2px_0px_0px_#111]">
+          {error}
+        </p>
+      )}
       <Button
         type="submit"
         themeColor="primary"
         size="large"
-        disabled={submitting || name.trim().length < 2}
+        disabled={!canContinue}
       >
         {submitting ? "Signing in…" : "Continue"}
       </Button>

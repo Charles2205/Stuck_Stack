@@ -32,6 +32,20 @@ type Props = {
   onSolve: (blocker: BlockerDTO) => void;
 };
 
+type ViewerBlockerRole = "neutral" | "stuck" | "helper-offered" | "helper-active";
+
+function getViewerBlockerRole(blocker: BlockerDTO): ViewerBlockerRole {
+  if (
+    blocker.viewerOffer?.status === "CLAIMED" ||
+    blocker.viewerOffer?.status === "COMPLETED"
+  ) {
+    return "helper-active";
+  }
+  if (blocker.viewerOffer) return "helper-offered";
+  if (blocker.viewerStuckToo) return "stuck";
+  return "neutral";
+}
+
 export function BlockerCard({
   blocker,
   viewer,
@@ -43,6 +57,7 @@ export function BlockerCard({
 }: Props) {
   const style = STATUS_STYLE[blocker.status];
   const solved = blocker.status === "SOLVED";
+  const viewerRole = getViewerBlockerRole(blocker);
   const canSolve =
     viewer !== null &&
     !solved &&
@@ -115,35 +130,68 @@ export function BlockerCard({
           className="flex flex-wrap gap-2"
           style={{ flexFlow: "row wrap", flexWrap: "wrap", display: "flex", gap: "8px" }}
         >
-          {!blocker.viewerIsAuthor && (
+          {!blocker.viewerIsAuthor && viewerRole === "neutral" && (
+            <>
+              <Button
+                size="small"
+                togglable
+                selected={false}
+                disabled={busy}
+                onClick={() => onStuckToo(blocker)}
+              >
+                I&apos;m stuck too
+              </Button>
+              <Button
+                size="small"
+                themeColor="success"
+                disabled={busy}
+                onClick={() => onOfferHelp(blocker)}
+              >
+                I can help
+              </Button>
+            </>
+          )}
+          {!blocker.viewerIsAuthor && viewerRole === "stuck" && (
             <Button
               size="small"
               togglable
-              selected={blocker.viewerStuckToo}
+              selected
               disabled={busy}
               onClick={() => onStuckToo(blocker)}
             >
-              {blocker.viewerStuckToo ? "✓ Stuck too" : "I'm stuck too"}
+              ✓ Stuck too
             </Button>
           )}
-          {!blocker.viewerIsAuthor && !blocker.viewerOffer && (
+          {!blocker.viewerIsAuthor && viewerRole === "helper-offered" && (
+            <>
+              <Button
+                size="small"
+                togglable
+                selected
+                disabled
+                themeColor="success"
+              >
+                ✓ Offering help
+              </Button>
+              <Button
+                size="small"
+                themeColor="primary"
+                disabled={busy}
+                onClick={() => onClaimSlot(blocker)}
+              >
+                Claim a 5-min slot
+              </Button>
+            </>
+          )}
+          {!blocker.viewerIsAuthor && viewerRole === "helper-active" && (
             <Button
               size="small"
+              togglable
+              selected
+              disabled
               themeColor="success"
-              disabled={busy}
-              onClick={() => onOfferHelp(blocker)}
             >
-              I can help
-            </Button>
-          )}
-          {blocker.viewerOffer?.status === "OFFERED" && (
-            <Button
-              size="small"
-              themeColor="primary"
-              disabled={busy}
-              onClick={() => onClaimSlot(blocker)}
-            >
-              Claim a 5-min slot
+              ✓ Helping
             </Button>
           )}
           {canSolve && (

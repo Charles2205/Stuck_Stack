@@ -18,6 +18,16 @@ export async function offerHelp(
     throw new ApiError("CONFLICT", "This blocker is already solved");
   }
 
+  const stuckToo = await prisma.stuckToo.findUnique({
+    where: { blockerId_attendeeId: { blockerId, attendeeId: helperId } },
+  });
+  if (stuckToo) {
+    throw new ApiError(
+      "CONFLICT",
+      "You're stuck on this blocker — remove stuck too before offering help",
+    );
+  }
+
   // Idempotent: re-offering returns the existing offer.
   const offer = await prisma.helpOffer.upsert({
     where: { blockerId_helperId: { blockerId, helperId } },

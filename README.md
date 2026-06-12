@@ -4,7 +4,7 @@
 
 Built for the **Progress x GitNation hackathon** with Next.js (App Router), Prisma, and **KendoReact**.
 
-📄 Full system design: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+📄 Full system design: `[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)`
 
 ## Quick start
 
@@ -24,7 +24,7 @@ npm run typecheck   # tsc --noEmit (strict)
 npm test            # Vitest unit tests (session token signing, Zod schemas)
 ```
 
-Open <http://localhost:3000>:
+Open [http://localhost:3000](http://localhost:3000):
 
 1. **Join** the seeded event ("GitNation Conf 2026") with just your name.
 2. **Board** (`/event/gitnation-2026`): Kendo Cards full of seeded blockers. Filter by tag (MultiSelect), post your own blocker (Dialog), hit *"I'm stuck too"*, or *"I can help"* → *"Claim a 5-min slot"*.
@@ -45,27 +45,31 @@ Two fully independent sessions:
 
 ## Environment variables
 
-| Variable | Default | Notes |
-|---|---|---|
-| `DATABASE_URL` | `file:./dev.db` | SQLite for local dev (see `.env.example`). For production use a Postgres URL. |
-| `SESSION_SECRET` | dev fallback | Signs the organizer session cookie. Set a real random secret in production. |
-| `TELERIK_LICENSE` / license file | – | Optional: activates the KendoReact trial/dev license (see below). |
+
+| Variable                         | Default         | Notes                                                                         |
+| -------------------------------- | --------------- | ----------------------------------------------------------------------------- |
+| `DATABASE_URL`                   | `file:./dev.db` | SQLite for local dev (see `.env.example`). For production use a Postgres URL. |
+| `SESSION_SECRET`                 | dev fallback    | Signs the organizer session cookie. Set a real random secret in production.   |
+| `TELERIK_LICENSE` / license file | –               | Optional: activates the KendoReact trial/dev license (see below).             |
+
 
 ## KendoReact components & licensing
 
 KendoReact is used throughout (judging requirement):
 
-| Component | Where |
-|---|---|
-| **Card** | blocker cards on the public board |
-| **Badge** | "stuck too" + helper counts, status chips |
-| **MultiSelect** | tag picker when posting, tag filter on the board |
-| **Dialog** | "post a blocker" and "claim a help slot" flows |
-| **Grid** (sortable, filterable) | organiser view of all blockers |
-| **Chart** | demand vs. helpers by category on the dashboard |
-| **DatePicker** | event date in the workspace create/edit dialog |
-| **Buttons / Inputs / TextArea / NumericTextBox / Label** | all forms and actions |
-| **Scheduler** | *not in MVP* — the help-slot picker is a simple form; the swap point is marked `TODO(kendo-scheduler)` in `components/board/ClaimSlotDialog.tsx` |
+
+| Component                                                | Where                                                                                                                                            |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Card**                                                 | blocker cards on the public board                                                                                                                |
+| **Badge**                                                | "stuck too" + helper counts, status chips                                                                                                        |
+| **MultiSelect**                                          | tag picker when posting, tag filter on the board                                                                                                 |
+| **Dialog**                                               | "post a blocker" and "claim a help slot" flows                                                                                                   |
+| **Grid** (sortable, filterable)                          | organiser view of all blockers                                                                                                                   |
+| **Chart**                                                | demand vs. helpers by category on the dashboard                                                                                                  |
+| **DatePicker**                                           | event date in the workspace create/edit dialog                                                                                                   |
+| **Buttons / Inputs / TextArea / NumericTextBox / Label** | all forms and actions                                                                                                                            |
+| **Scheduler**                                            | *not in MVP* — the help-slot picker is a simple form; the swap point is marked `TODO(kendo-scheduler)` in `components/board/ClaimSlotDialog.tsx` |
+
 
 **Licensing:** free-tier components (Buttons, Inputs, …) need no license. Grid, Chart, Dialog & co. run under the **KendoReact trial license** — without an activated license they work fully but show a watermark/console notice. To remove it, sign up for the free trial at telerik.com, download your license key, and run `npx kendo-ui-license activate` (or set the `TELERIK_LICENSE` env var, including on Vercel).
 
@@ -99,3 +103,4 @@ docs/ARCHITECTURE.md  design document
 - **Kendo Scheduler** — visual help-slot timeline per help-desk table.
 - **Post-event recap** — "who helped me / who I helped" follow-up email so 5-minute slots become lasting connections.
 - **Clinic lifecycle** — organisers accept a suggestion → attendees with matching blockers get notified, room/table gets booked.
+

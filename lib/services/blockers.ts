@@ -126,6 +126,17 @@ export async function toggleStuckToo(
   const existing = await prisma.stuckToo.findUnique({
     where: { blockerId_attendeeId: { blockerId, attendeeId } },
   });
+  if (!existing) {
+    const helpOffer = await prisma.helpOffer.findUnique({
+      where: { blockerId_helperId: { blockerId, helperId: attendeeId } },
+    });
+    if (helpOffer) {
+      throw new ApiError(
+        "CONFLICT",
+        "You're offering help on this blocker — withdraw help before marking stuck too",
+      );
+    }
+  }
   if (existing) {
     await prisma.stuckToo.delete({ where: { id: existing.id } });
   } else {

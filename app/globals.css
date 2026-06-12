@@ -571,3 +571,70 @@ textarea.k-textarea {
   background-color: #00e676 !important;
   color: #111 !important;
 }
+
+/* Blocker TaskBoard — horizontal lanes for personal/status grouping */
+.blocker-taskboard .k-taskboard {
+  background: transparent !important;
+  border: none !important;
+}
+
+.blocker-taskboard .k-taskboard-content {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.blocker-taskboard .k-taskboard-columns-container {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: 1rem !important;
+  min-height: 420px;
+}
+
+.blocker-taskboard .k-taskboard-column {
+  min-width: min(340px, 88vw) !important;
+  max-width: 360px !important;
+  flex: 0 0 auto !important;
+  border: 4px solid #111 !important;
+  border-radius: 0 !important;
+  box-shadow: 6px 6px 0 0 #111 !important;
+  background: #fff !important;
+}
+
+.blocker-taskboard .k-taskboard-column-header {
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.blocker-taskboard .k-taskboard-column-cards {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  padding: 0.75rem !important;
+  max-height: min(70vh, 720px);
+  overflow-y: auto;
+}
+
+.blocker-taskboard-card {
+  width: 100%;
+}
+
+.blocker-taskboard-card .k-card {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.blocker-taskboard .k-taskboard-card {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.blocker-taskboard .k-taskboard-column-header-actions,
+.blocker-taskboard .k-taskboard-add-card-button,
+.blocker-taskboard .k-taskboard-card-menu,
+.blocker-taskboard .k-taskboard-preview-pane {
+  display: none !important;
+}
